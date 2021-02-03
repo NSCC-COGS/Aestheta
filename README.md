@@ -9,6 +9,6 @@ Starting out: lets have a look at the previous tutorials from GDA2030 to get an 
 
 let's do this!
 
-Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite classification and other weird tests in our [experiments](/experiments) section... 
+Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite classification and other weird tests in our [experiments](/Experiments) section... 
 
 ![Hello Earth](/Logos/HelloEarth.png)
