@@ -1,4 +1,4 @@
-![Aestheta Logo](/Logos/logo_1280x640.png)
+![Aestheta Logo](/Images/logo_1280x640.png)
 
 # Aestheta
 An Industrial Think Tank Focused on Developing and Promoting AI Technology for Geospatial Applications
@@ -11,4 +11,4 @@ let's do this!
 
 Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite classification and other weird tests in our [experiments](/Experiments) section... 
 
-![Hello Earth](/Logos/HelloEarth.png)
+![Hello Earth](/Images/HelloEarth.png)
