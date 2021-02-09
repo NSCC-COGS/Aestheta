@@ -48,6 +48,10 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     else:
         return img
 
+def classifyImage(image1,image2):
+    classification = image1+image2
+    return classification
+
 if __name__ == '__main__':
     #for now we can put tests here!
     from matplotlib import pyplot as plt
