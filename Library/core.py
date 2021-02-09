@@ -4,7 +4,7 @@ import os
 import requests
 import imageio'''
 
-def getTile(xyz=[0,0,0], source = 'google_map'):
+def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     '''grabs a tile of a given xyz from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
     import requests,imageio
@@ -40,6 +40,12 @@ def getTile(xyz=[0,0,0], source = 'google_map'):
     res= requests.get(url, stream = True, headers=headers)
 
     img = imageio.imread(res.content)
+
+    if show:
+        from matplotlib import pyplot as plt
+        plt.imshow(testTile)
+        plt.show()
+        
     return img
 
 if __name__ == '__main__':
