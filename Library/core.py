@@ -10,7 +10,6 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     import requests,imageio
 
     #converts the list of xyz to variables  
-    x,y,z = xyz[0],xyz[1],xyz[2]
     x,y,z = xyz
     print(x,y,z)
 
