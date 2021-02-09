@@ -46,7 +46,8 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
         plt.imshow(img)
         plt.show()
 
-    return img
+    else:
+        return img
 
 if __name__ == '__main__':
     #for now we can put tests here!
