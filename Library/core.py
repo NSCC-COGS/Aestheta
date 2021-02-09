@@ -43,9 +43,9 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
 
     if show:
         from matplotlib import pyplot as plt
-        plt.imshow(testTile)
+        plt.imshow(img)
         plt.show()
-        
+
     return img
 
 if __name__ == '__main__':
