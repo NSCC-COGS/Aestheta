@@ -11,4 +11,11 @@ let's do this!
 
 Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite classification and other weird tests in our [experiments](/Experiments) section... 
 
+# Earth is Special
+We're teaching an AI to understand what it means to be looking at our lovely planet. 
+
+![Classified Earth](/Images/classified_earth.PNG)
+
+There is lots of great data available and tools we can use! Early results are very promising. 
+
 ![Hello Earth](/Images/HelloEarth.png)
