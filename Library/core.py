@@ -65,11 +65,13 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
 def classifyImage(img_RGB,classModel,classes):
     import numpy as np
     print('applying classification...')
-
+    # Getting shape of the incoming file
+    arr_RGB_shape = img_RGB.shape
     arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
     arr_classes_model = classModel.predict(arr_RGB)
     arr_label_model = classes[arr_classes_model]
-    img_class = np.reshape(arr_label_model,(256,256,4)) #hard coded for 256x256 images!
+    # Substituting the shape of the incoming file arr_RGB_shape instead of a hard coded 256x256 size
+    img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
 
     return img_class
 
