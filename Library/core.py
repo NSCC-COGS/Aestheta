@@ -1,13 +1,12 @@
-'''import numpy as np
+import numpy as np
 import urllib.request
 import os
 import requests
-import imageio'''
+import imageio
 
 def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     '''grabs a tile of a given xyz from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
-    import requests,imageio
 
     #converts the list of xyz to variables  
     x,y,z = xyz
@@ -48,13 +47,49 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     else:
         return img
 
-def classifyImage(image1,image2):
-    classification = image1+image2
-    return classification
+def simpleClassifier(img_RGB, img_features, subsample = 100):
+    print('training  classifier...')
+    classes,arr_classes =  np.unique(img_features.reshape(-1, img_features.shape[2]), axis=0, return_inverse=True)
+
+    from sklearn.ensemble import GradientBoostingClassifier
+    arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
+    arr_RGB_subsample = arr_RGB[::subsample]
+    arr_classes_subsample = arr_classes[::subsample]
+    classModel = GradientBoostingClassifier(n_estimators=1000, learning_rate=0.1,
+                                    max_depth=1, random_state=0,verbose=1).fit(arr_RGB_subsample, arr_classes_subsample)
+
+    return classModel, classes
+
+def classifyImage(img_RGB,classModel,classes):
+    print('applying classification...')
+    arr_RGB_shape = img_RGB.shape
+    arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
+    arr_classes_model = classModel.predict(arr_RGB)
+    arr_label_model = classes[arr_classes_model]
+    img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
+
+    return img_class
 
 if __name__ == '__main__':
     #for now we can put tests here!
-    from matplotlib import pyplot as plt
-    testTile = getTile()
-    plt.imshow(testTile)
-    plt.show()
+    if 0: #test load the wms tile
+
+        from matplotlib import pyplot as plt
+        testTile = getTile()
+        plt.imshow(testTile)
+        plt.show()
+
+    if 1: #test the simple classifier 
+
+        img_RGB = getTile(source = 'google_sat')
+        img_features = getTile(source = 'google_map')
+        classModel,classes = simpleClassifier(img_RGB, img_features)
+        img_class = classifyImage(img_RGB, classModel, classes)
+
+        from matplotlib import pyplot as plt
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+        ax1.imshow(img_RGB);ax1.axis('off');ax1.set_title('RGB')
+        ax2.imshow(img_features);ax2.axis('off');ax2.set_title('Features')
+        ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
+        plt.show()
+
