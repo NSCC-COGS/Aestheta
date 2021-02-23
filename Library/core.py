@@ -132,7 +132,7 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
     import numpy as np
     img_shifted = np.roll(img_RGB,distance,axis=axis)
-    img = img_shifted*1.0 - img_RGB*1.0 # what is happening to values under 0?
+    img = img_shifted*1.0 - img_RGB*1.0 #multiplying by 1.0 is a lazy way yo convert an array to float
 
     if show:
         from matplotlib import pyplot as plt
@@ -141,6 +141,25 @@ def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
 
     else:
         return img
+
+def image_convolution(img):
+    from scipy import ndimage
+    import numpy as np
+    kernel = np.array([
+        [0,.125,0],
+        [.125,.5,.125],
+        [0,.125,0]])
+    return ndimage.convolve(img, kernel, mode='constant', cval=0.0)
+    
+def image_convolution_RGB(img_RGB):
+    
+    img_RGB = img_RGB * 1.0
+
+    for band in range(0,img_RGB.shape[2]):
+
+        img_RGB[:,:,band] = image_convolution(img_RGB[:,:,band])
+
+    return img_RGB
 
 if __name__ == '__main__':
     #for now we can put tests here!
@@ -170,11 +189,32 @@ if __name__ == '__main__':
         input('press enter to continue with experimental version...')
         img_RGB = getTiles_experimental(xyz = xyz_novaScotia, source = 'google_sat', show=True)
 
-    if 1: #test image shift difference
+    if 0: #test image shift difference
         img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
         image_shift_diff(img_RGB[:,:,0], show=True)
         img_RGB = getTile(xyz = [41,45,7], source = 'google_map')
         image_shift_diff(img_RGB[:,:,0], show=True)
         img_RGB = getTiles_3x3(xyz = [41,45,7], source = 'google_sat')
         image_shift_diff(img_RGB[:,:,0], show=True)
+
+    if 1: # test image convolution 
+        img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
+        img = img_RGB[:,:,0]
+        img_c = image_convolution(img)
+
+        img_c = img_c*1.0 - img*1.0
+        from matplotlib import pyplot as plt
+        plt.imshow(img_c)
+        plt.show()
+
+    if 1: #test image convolution RGB
+        img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
+        img_RGB_c = image_convolution_RGB(img_RGB)
+
+        img_RGB_c = img_RGB_c*1.0 -  img_RGB*1.0
+        from matplotlib import pyplot as plt
+        plt.imshow(img_RGB_c)
+        plt.show()
+
+
 
