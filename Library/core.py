@@ -185,6 +185,7 @@ if __name__ == '__main__':
 
     if 0: #test 3x3 tile
         xyz_novaScotia = [41,45,7]
+        img_RGB = getTile(xyz = xyz_novaScotia, source = 'google_sat', show=True)
         img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat', show=True)
         input('press enter to continue with experimental version...')
         img_RGB = getTiles_experimental(xyz = xyz_novaScotia, source = 'google_sat', show=True)
@@ -204,10 +205,10 @@ if __name__ == '__main__':
 
         img_c = img_c*1.0 - img*1.0
         from matplotlib import pyplot as plt
-        plt.imshow(img_c)
+        plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 1: #test image convolution RGB
+    if 0: #test image convolution RGB
         img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
         img_RGB_c = image_convolution_RGB(img_RGB)
 
