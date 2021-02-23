@@ -75,6 +75,73 @@ def classifyImage(img_RGB,classModel,classes):
 
     return img_class
 
+def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
+    import numpy as np
+    x,y,z = xyz
+    idx = [-1,0,1]
+    # idx = [-2-1,0,1,2]
+    img = 'Start'
+    for j in idx:
+        for k in idx:
+            print(j,k)
+            tile_img = getTile(xyz=[x+j,y+k,z], source = source, show=False)
+            if img == 'Start':
+                img = np.zeros((256*3,256*3,3),dtype=tile_img.dtype) # this will certainly throw an error when input images are more than 3 bands
+            x0 = (j+1)*256
+            y0 = (k+1)*256
+            img[y0:y0+256,x0:x0+256] = tile_img
+ 
+    if show:
+        from matplotlib import pyplot as plt
+        plt.imshow(img)
+        plt.show()
+
+    else:
+        return img
+
+def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
+    import numpy as np
+    x,y,z = xyz
+    idx = [-1,0,1]
+    tiles = []
+    img = 'Start'
+    for j in idx:
+        for k in idx:
+            print(j,k)
+            # tiles.append(getTile(xyz=[x+j,y+k,z], source = source, show=False)*0+100-k*100)
+            tiles.append(getTile(xyz=[x+j,y-k,z], source = source, show=False))
+
+    tiles = np.array(tiles)
+    print(tiles.shape)
+
+    from matplotlib import pyplot as plt
+    plt.imshow(tiles[0])
+    plt.show()
+
+    img = tiles.reshape(3*256*3*256,3)
+    print(img.shape)
+    
+    if show:
+        from matplotlib import pyplot as plt
+        plt.imshow(img)
+        plt.show()
+
+    else:
+        return img
+
+def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
+    import numpy as np
+    img_shifted = np.roll(img_RGB,distance,axis=axis)
+    img = img_shifted*1.0 - img_RGB*1.0 # what is happening to values under 0?
+
+    if show:
+        from matplotlib import pyplot as plt
+        plt.imshow(img, cmap='gray')
+        plt.show()
+
+    else:
+        return img
+
 if __name__ == '__main__':
     #for now we can put tests here!
     if 0: #test load the wms tile
@@ -84,8 +151,7 @@ if __name__ == '__main__':
         plt.imshow(testTile)
         plt.show()
 
-    if 1: #test the simple classifier 
-
+    if 0: #test the simple classifier 
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
@@ -97,3 +163,18 @@ if __name__ == '__main__':
         ax2.imshow(img_features);ax2.axis('off');ax2.set_title('Features')
         ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
         plt.show()
+
+    if 0: #test 3x3 tile
+        xyz_novaScotia = [41,45,7]
+        img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat', show=True)
+        input('press enter to continue with experimental version...')
+        img_RGB = getTiles_experimental(xyz = xyz_novaScotia, source = 'google_sat', show=True)
+
+    if 1: #test image shift difference
+        img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
+        image_shift_diff(img_RGB[:,:,0], show=True)
+        img_RGB = getTile(xyz = [41,45,7], source = 'google_map')
+        image_shift_diff(img_RGB[:,:,0], show=True)
+        img_RGB = getTiles_3x3(xyz = [41,45,7], source = 'google_sat')
+        image_shift_diff(img_RGB[:,:,0], show=True)
+
