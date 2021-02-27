@@ -26,15 +26,13 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
         TOKEN = 'pk.eyJ1Ijoicm5zcmciLCJhIjoiZTA0NmIwY2ZkYWJmMGZmMTAwNDYyNzdmYzkyODQyNDkifQ.djD5YCQzikYGFBo8pwiaNA'
         url = f'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={TOKEN}'
 
-    elif source == 'otile':
-        #note this may not work
-        url = f'http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png'
-
+    elif source == 'esri':
+        # otiles was down so replaced with esri - a nice source
+        url = f'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{x}/{y}/{z}'
 
     #creates a header indicating a user browser to bypass blocking, note this is not meant for exhaustive usage
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
-
-
+    
     res= requests.get(url, stream = True, headers=headers)
 
     img = imageio.imread(res.content)
