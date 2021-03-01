@@ -35,7 +35,7 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     # If our coords are floats, assume we're dealing with lat and long, and
     # convert them to tile x, y, z.
     x, y, z = xyz
-    if all(isinstance(n, float) for n in [x, y]):
+    if isinstance(x, float) and isinstance(y, float):
         x, y, z = tile_from_coords(x, y, z)
 
     print(x, y, z)
