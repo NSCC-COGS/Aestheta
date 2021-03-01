@@ -57,7 +57,7 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
     arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
     arr_RGB_subsample = arr_RGB[::subsample]
     arr_classes_subsample = arr_classes[::subsample]
-    classModel = GradientBoostingClassifier(n_estimators=1000, learning_rate=0.1,
+    classModel = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1,
                                     max_depth=1, random_state=0,verbose=1).fit(arr_RGB_subsample, arr_classes_subsample)
 
     return classModel, classes
