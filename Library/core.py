@@ -4,14 +4,36 @@ import os
 import requests
 import imageio'''
 
+# Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
+def tile_from_coords(lon, lat, zoom):
+    import math
+    lat_rad = math.radians(lat)
+    n = 2.0 ** zoom
+    tile_x = int((lon + 180.0) / 360.0 * n)
+    tile_y = int((1.0 - math.asinh(math.tan(lat_rad)) / math.pi) / 2.0 * n)
+    return [tile_x, tile_y, zoom]
+
+# Adapted from num2deg at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
+def coords_from_tile(tile_x, tile_y, zoom):
+    import math
+    n = 2.0 ** zoom
+    lon_deg = tile_x / n * 360.0 - 180.0
+    lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * tile_y / n)))
+    lat_deg = math.degrees(lat_rad)
+    return [lon_deg, lat_deg, zoom]
+
 def getTile(xyz=[0,0,0], source = 'google_map', show=False):
-    '''grabs a tile of a given xyz from various open WMS services
+    '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
     import requests,imageio
 
-    #converts the list of xyz to variables  
-    x,y,z = xyz
-    print(x,y,z)
+    # If our coords are floats, assume we're dealing with lat and long, and
+    # convert them to tile x, y, z.
+    x, y, z = xyz
+    if all(isinstance(n, float) for n in [x, y]):
+        x, y, z = tile_from_coords(x, y, z)
+
+    print(x, y, z)
 
     #makes our WMS url from 
     if source == 'google_map':
@@ -282,6 +304,24 @@ if __name__ == '__main__':
         from matplotlib import pyplot as plt
         plt.imshow(img_RGB_c)
         plt.show()
+        
+    if 0: # Test image convolution with coordinate transforms.
+        # Coordinates of NSCC COGS; zoom level 15
+        lat, lon, z = 44.88516350846845, -65.16834212839683, 15
+        
+        # Convert coords -> tile -> coords
+        x1, y1, z1 = tile_from_coords(lon, lat, z)
+        x2, y2, z2 = coords_from_tile(x1, y1, z1)
+        
+        # Feed resulting lon, lat, z to getTile.
+        img_RGB = getTile(xyz = [x2, y2, z2], source = 'google_sat')
+        img = img_RGB[:,:,0]
+        img_c = image_convolution(img)
+
+        img_c = img_c*1.0 - img*1.0
+        from matplotlib import pyplot as plt
+        plt.imshow(img_c, cmap='gray')
+        plt.show()
 
     if 0: #test model save
         img_RGB = getTile(source = 'google_sat')
@@ -329,7 +369,3 @@ if __name__ == '__main__':
         from matplotlib import pyplot as plt
         plt.imshow(img_class)
         plt.show()
-
-
-
-
