@@ -1,8 +1,8 @@
-'''import numpy as np
+import numpy as np
 import urllib.request
 import os
 import requests
-import imageio'''
+import imageio
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
@@ -25,7 +25,6 @@ def coords_from_tile(tile_x, tile_y, zoom):
 def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
-    import requests,imageio
 
     # If our coords are floats, assume we're dealing with lat and long, and
     # convert them to tile x, y, z.
@@ -49,15 +48,13 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
         TOKEN = 'pk.eyJ1Ijoicm5zcmciLCJhIjoiZTA0NmIwY2ZkYWJmMGZmMTAwNDYyNzdmYzkyODQyNDkifQ.djD5YCQzikYGFBo8pwiaNA'
         url = f'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={TOKEN}'
 
-    elif source == 'otile':
-        #note this may not work
-        url = f'http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png'
-
+    elif source == 'esri':
+        # otiles was down so replaced with esri - a nice source
+        url = f'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
 
     #creates a header indicating a user browser to bypass blocking, note this is not meant for exhaustive usage
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
-
-
+    
     res= requests.get(url, stream = True, headers=headers)
 
     img = imageio.imread(res.content)
@@ -71,7 +68,6 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
         return img
 
 def simpleClassifier(img_RGB, img_features, subsample = 100):
-    import numpy as np
     print('training  classifier...')
     classes,arr_classes =  np.unique(img_features.reshape(-1, img_features.shape[2]), axis=0, return_inverse=True)
 
@@ -79,8 +75,15 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
     arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
     arr_RGB_subsample = arr_RGB[::subsample]
     arr_classes_subsample = arr_classes[::subsample]
-    classModel = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1,
-                                    max_depth=1, random_state=0,verbose=1).fit(arr_RGB_subsample, arr_classes_subsample)
+    #classModel = GradientBoostingClassifier(n_estimators=1000, learning_rate=0.1,
+    # max_depth=1, random_state=0,verbose=1).fit(arr_RGB_subsample, arr_classes_subsample)
+    classModel = GradientBoostingClassifier(
+            n_estimators=100,
+            learning_rate=0.1,
+            max_depth=1,
+            random_state=0,
+            verbose=1
+        ).fit(arr_RGB_subsample, arr_classes_subsample)
 
     return classModel, classes
 
@@ -157,6 +160,16 @@ def classifyImage(img_RGB,classModel = None ,classes = None):
     img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
     
     return img_class
+  
+#def classifyImage(img_RGB,classModel,classes):
+#    print('applying classification...')
+#    arr_RGB_shape = img_RGB.shape
+#    arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
+#    arr_classes_model = classModel.predict(arr_RGB)
+#    arr_label_model = classes[arr_classes_model]
+#    img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
+#
+#    return img_class
 
 def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
     import numpy as np

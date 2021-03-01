@@ -1,0 +1,8 @@
+ESRI has a hub with cool GeoAI projects including:
+    Object extraction from mobile lidar with ML
+    Monitoring traffic flow using deep learning
+    Change detection of structures in panchromatic imagery
+
+Note to Kevin and all:
+After eelgrass project is complete, should we consider mimicking one of these projects to learn the workflow?
+https://medium.com/geoai
