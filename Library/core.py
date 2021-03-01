@@ -28,7 +28,7 @@ def coords_from_tile(tile_x, tile_y, zoom):
     lat_deg = math.degrees(lat_rad)
     return [lon_deg, lat_deg, zoom]
 
-def getTile(xyz=[0,0,0], source = 'google_map', show=False):
+def getTile(xyz=[0,0,0], source='google_map', show=False):
     '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
 
@@ -40,36 +40,27 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
 
     print(x, y, z)
 
-    #makes our WMS url from 
     if source == 'google_map':
         url = f'http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
-    
     elif source == 'google_sat':
         url = f'http://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
-
     elif source == 'osm_map':
         url = f'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-
     elif source == 'mapbox_sat':
         TOKEN = 'pk.eyJ1Ijoicm5zcmciLCJhIjoiZTA0NmIwY2ZkYWJmMGZmMTAwNDYyNzdmYzkyODQyNDkifQ.djD5YCQzikYGFBo8pwiaNA'
         url = f'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={TOKEN}'
-
     elif source == 'esri':
         # otiles was down so replaced with esri - a nice source
         url = f'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
 
     #creates a header indicating a user browser to bypass blocking, note this is not meant for exhaustive usage
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
-    
-    res= requests.get(url, stream = True, headers=headers)
-
+    res = requests.get(url, stream=True, headers=headers)
     img = imageio.imread(res.content)
 
     if show:
-        
         plt.imshow(img)
         plt.show()
-
     else:
         return img
 
