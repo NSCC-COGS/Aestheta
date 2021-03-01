@@ -1,12 +1,19 @@
-import numpy as np
-import urllib.request
-import os
-import requests
 import imageio
+import math
+import numpy as np
+import os
+import pickle
+import re
+import requests
+import urllib.request
+
+from datetime import datetime
+from matplotlib import pyplot as plt
+from scipy import ndimage
+from sklearn.ensemble import GradientBoostingClassifier
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
-    import math
     lat_rad = math.radians(lat)
     n = 2.0 ** zoom
     tile_x = int((lon + 180.0) / 360.0 * n)
@@ -15,7 +22,6 @@ def tile_from_coords(lon, lat, zoom):
 
 # Adapted from num2deg at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def coords_from_tile(tile_x, tile_y, zoom):
-    import math
     n = 2.0 ** zoom
     lon_deg = tile_x / n * 360.0 - 180.0
     lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * tile_y / n)))
@@ -60,7 +66,7 @@ def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     img = imageio.imread(res.content)
 
     if show:
-        from matplotlib import pyplot as plt
+        
         plt.imshow(img)
         plt.show()
 
@@ -71,7 +77,7 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
     print('training  classifier...')
     classes,arr_classes =  np.unique(img_features.reshape(-1, img_features.shape[2]), axis=0, return_inverse=True)
 
-    from sklearn.ensemble import GradientBoostingClassifier
+    
     arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
     arr_RGB_subsample = arr_RGB[::subsample]
     arr_classes_subsample = arr_classes[::subsample]
@@ -88,10 +94,6 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
     return classModel, classes
 
 def saveModel(classModel, classes, sillyName = None):
-    from datetime import datetime
-    import pickle,os
-    
-
     #puts the classificaion model and the classes into a list 
     model = [classModel, classes]
 
@@ -109,9 +111,6 @@ def saveModel(classModel, classes, sillyName = None):
     print('complete..')
 
 def loadModel(name = None, model_dir = 'Models/'):
-    import pickle,os
-    # import re
-
     model_list = os.listdir(model_dir)
     print(model_list)
 
@@ -140,8 +139,6 @@ def loadModel(name = None, model_dir = 'Models/'):
 
 
 def classifyImage(img_RGB,classModel = None ,classes = None):
-    import numpy as np
-
     if not classModel: # if no model set
         classModel,classes = loadModel() #loads the most recent model
 
@@ -172,7 +169,6 @@ def classifyImage(img_RGB,classModel = None ,classes = None):
 #    return img_class
 
 def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
-    import numpy as np
     x,y,z = xyz
     idx = [-1,0,1]
     # idx = [-2-1,0,1,2]
@@ -188,7 +184,6 @@ def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
             img[y0:y0+256,x0:x0+256] = tile_img
  
     if show:
-        from matplotlib import pyplot as plt
         plt.imshow(img)
         plt.show()
 
@@ -196,7 +191,6 @@ def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
         return img
 
 def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
-    import numpy as np
     x,y,z = xyz
     idx = [-1,0,1]
     tiles = []
@@ -210,7 +204,6 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
     tiles = np.array(tiles)
     print(tiles.shape)
 
-    from matplotlib import pyplot as plt
     plt.imshow(tiles[0])
     plt.show()
 
@@ -218,7 +211,6 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
     print(img.shape)
     
     if show:
-        from matplotlib import pyplot as plt
         plt.imshow(img)
         plt.show()
 
@@ -226,12 +218,10 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
         return img
 
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
-    import numpy as np
     img_shifted = np.roll(img_RGB,distance,axis=axis)
     img = img_shifted*1.0 - img_RGB*1.0 #multiplying by 1.0 is a lazy way yo convert an array to float
 
     if show:
-        from matplotlib import pyplot as plt
         plt.imshow(img, cmap='gray')
         plt.show()
 
@@ -239,8 +229,6 @@ def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
         return img
 
 def image_convolution(img):
-    from scipy import ndimage
-    import numpy as np
     kernel = np.array([
         [0,.125,0],
         [.125,.5,.125],
@@ -260,8 +248,6 @@ def image_convolution_RGB(img_RGB):
 if __name__ == '__main__':
     #for now we can put tests here!
     if 0: #test load the wms tile
-
-        from matplotlib import pyplot as plt
         testTile = getTile()
         plt.imshow(testTile)
         plt.show()
@@ -272,7 +258,6 @@ if __name__ == '__main__':
         classModel,classes = simpleClassifier(img_RGB, img_features)
         img_class = classifyImage(img_RGB, classModel, classes)
 
-        from matplotlib import pyplot as plt
         fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
         ax1.imshow(img_RGB);ax1.axis('off');ax1.set_title('RGB')
         ax2.imshow(img_features);ax2.axis('off');ax2.set_title('Features')
@@ -285,7 +270,7 @@ if __name__ == '__main__':
         img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat', show=True)
         input('press enter to continue with experimental version...')
         img_RGB = getTiles_experimental(xyz = xyz_novaScotia, source = 'google_sat', show=True)
-        from matplotlib import pyplot as plt
+
         fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
         ax1.imshow(img_RGB);ax1.axis('off');ax1.set_title('RGB')
         ax2.imshow(img_features);ax2.axis('off');ax2.set_title('Features')
@@ -305,7 +290,7 @@ if __name__ == '__main__':
         img_c = image_convolution(img)
 
         img_c = img_c*1.0 - img*1.0
-        from matplotlib import pyplot as plt
+
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
@@ -314,7 +299,7 @@ if __name__ == '__main__':
         img_RGB_c = image_convolution_RGB(img_RGB)
 
         img_RGB_c = img_RGB_c*1.0 -  img_RGB*1.0
-        from matplotlib import pyplot as plt
+
         plt.imshow(img_RGB_c)
         plt.show()
         
@@ -332,7 +317,6 @@ if __name__ == '__main__':
         img_c = image_convolution(img)
 
         img_c = img_c*1.0 - img*1.0
-        from matplotlib import pyplot as plt
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
@@ -348,7 +332,6 @@ if __name__ == '__main__':
         classModel, classes = loadModel()
         img_class = classifyImage(img_RGB, classModel, classes)
         
-        from matplotlib import pyplot as plt
         plt.imshow(img_class)
         plt.show()
 
@@ -360,7 +343,6 @@ if __name__ == '__main__':
         img_class_1 = classifyImage(img_RGB_1, classModel, classes)
         img_class_2 = classifyImage(img_RGB_2, classModel, classes)
         
-        from matplotlib import pyplot as plt
         fig, (ax1, ax2, ) = plt.subplots(1, 2)
         ax1.imshow(img_class_1);ax1.axis('off');ax1.set_title('Test_1')
         ax2.imshow(img_class_2);ax2.axis('off');ax2.set_title('Test_2')
@@ -370,7 +352,6 @@ if __name__ == '__main__':
         img_RGB = getTile(source = 'google_sat')
         img_class = classifyImage(img_RGB)
 
-        from matplotlib import pyplot as plt
         plt.imshow(img_class)
         plt.show()
 
@@ -379,6 +360,5 @@ if __name__ == '__main__':
         img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat')
         img_class = classifyImage(img_RGB)
 
-        from matplotlib import pyplot as plt
         plt.imshow(img_class)
         plt.show()
