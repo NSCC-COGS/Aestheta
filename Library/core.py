@@ -62,17 +62,78 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
 
     return classModel, classes
 
-def classifyImage(img_RGB,classModel,classes):
+def saveModel(classModel, classes, sillyName = None):
+    from datetime import datetime
+    import pickle,os
+    
+
+    #puts the classificaion model and the classes into a list 
+    model = [classModel, classes]
+
+    #creates a string for the current time 
+    now = datetime.now()
+    uniqueString = now.strftime("%Y%m%d%H%M%S")
+
+    if sillyName:
+        uniqueString += '_'+sillyName
+
+    #saves out the model list with a name from the current time
+    filename = f'Models/simpleClassifier_{uniqueString}.aist'
+    print('saving model to',filename)
+    pickle.dump(model, open(filename, 'wb'))
+    print('complete..')
+
+def loadModel(name = None, model_dir = 'Models/'):
+    import pickle,os
+    # import re
+
+    model_list = os.listdir(model_dir)
+    print(model_list)
+
+    if name == None: #loads most recent
+        maxDate = 0 
+        newest_model = None
+        print('getting most recent model')
+        for model_name in model_list:
+            model_name_hack = model_name.replace('.','_')
+            model_name_list = model_name_hack.split('_')
+            date_time = int(model_name_list[1])
+            if date_time > maxDate:
+                newest_model = model_name
+                maxDate = date_time
+
+            print(date_time)
+            # print(model_name.split('_'))
+            # a = re.split('_|.',model_name)
+            # print(a)
+            
+    filename = model_dir+newest_model
+    print(filename)
+    classModel, classes = pickle.load(open(filename, 'rb'))
+
+    return classModel, classes
+
+
+def classifyImage(img_RGB,classModel = None ,classes = None):
     import numpy as np
+
+    if not classModel: # if no model set
+        classModel,classes = loadModel() #loads the most recent model
+
     print('applying classification...')
     # Getting shape of the incoming file
     arr_RGB_shape = img_RGB.shape
+
+    if 1: # a very temporary fix, the resultant array needs the 'depth' of the classes (which is RGBA)
+        arr_RGB_shape = list(arr_RGB_shape)
+        arr_RGB_shape[2] = classes.shape[1]  
+
     arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
     arr_classes_model = classModel.predict(arr_RGB)
     arr_label_model = classes[arr_classes_model]
     # Substituting the shape of the incoming file arr_RGB_shape instead of a hard coded 256x256 size
     img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
-
+    
     return img_class
 
 def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
@@ -189,7 +250,12 @@ if __name__ == '__main__':
         img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat', show=True)
         input('press enter to continue with experimental version...')
         img_RGB = getTiles_experimental(xyz = xyz_novaScotia, source = 'google_sat', show=True)
-
+        from matplotlib import pyplot as plt
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+        ax1.imshow(img_RGB);ax1.axis('off');ax1.set_title('RGB')
+        ax2.imshow(img_features);ax2.axis('off');ax2.set_title('Features')
+        ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
+        plt.show()
     if 0: #test image shift difference
         img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
         image_shift_diff(img_RGB[:,:,0], show=True)
@@ -198,7 +264,7 @@ if __name__ == '__main__':
         img_RGB = getTiles_3x3(xyz = [41,45,7], source = 'google_sat')
         image_shift_diff(img_RGB[:,:,0], show=True)
 
-    if 1: # test image convolution 
+    if 0: # test image convolution 
         img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
         img = img_RGB[:,:,0]
         img_c = image_convolution(img)
@@ -216,6 +282,54 @@ if __name__ == '__main__':
         from matplotlib import pyplot as plt
         plt.imshow(img_RGB_c)
         plt.show()
+
+    if 0: #test model save
+        img_RGB = getTile(source = 'google_sat')
+        img_features = getTile(source = 'google_map')
+        classModel,classes = simpleClassifier(img_RGB, img_features)
+
+        saveModel(classModel, classes, sillyName = 'HelloEarth100')
+
+    if 0: #test load model
+        img_RGB = getTile(source = 'google_sat')
+        classModel, classes = loadModel()
+        img_class = classifyImage(img_RGB, classModel, classes)
+        
+        from matplotlib import pyplot as plt
+        plt.imshow(img_class)
+        plt.show()
+
+    if 0: #test load model, multiple
+        ''' this is unreasonably slow!''' 
+        classModel, classes = loadModel()
+        img_RGB_1 = getTile(source = 'google_sat')
+        img_RGB_2 = getTile(xyz = [41,45,7], source = 'google_sat')
+        img_class_1 = classifyImage(img_RGB_1, classModel, classes)
+        img_class_2 = classifyImage(img_RGB_2, classModel, classes)
+        
+        from matplotlib import pyplot as plt
+        fig, (ax1, ax2, ) = plt.subplots(1, 2)
+        ax1.imshow(img_class_1);ax1.axis('off');ax1.set_title('Test_1')
+        ax2.imshow(img_class_2);ax2.axis('off');ax2.set_title('Test_2')
+        plt.show()
+
+    if 0: #test default/recent model
+        img_RGB = getTile(source = 'google_sat')
+        img_class = classifyImage(img_RGB)
+
+        from matplotlib import pyplot as plt
+        plt.imshow(img_class)
+        plt.show()
+
+    if 1: #test 3x3 classifier 
+        xyz_novaScotia = [41,45,7]
+        img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat')
+        img_class = classifyImage(img_RGB)
+
+        from matplotlib import pyplot as plt
+        plt.imshow(img_class)
+        plt.show()
+
 
 
 
