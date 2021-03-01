@@ -72,7 +72,7 @@ def saveModel(classModel, classes, sillyName = None):
 
     #creates a string for the current time 
     now = datetime.now()
-    uniqueString = now.strftime("%Y%m%d%H%M%S")
+    uniqueString = now.strftime("%Y%m%d%H%M%S") #https://www.programiz.com/python-programming/datetime/strftime
 
     if sillyName:
         uniqueString += '_'+sillyName
@@ -125,7 +125,7 @@ def classifyImage(img_RGB,classModel = None ,classes = None):
     arr_RGB_shape = img_RGB.shape
 
     if 1: # a very temporary fix, the resultant array needs the 'depth' of the classes (which is RGBA)
-        arr_RGB_shape = list(arr_RGB_shape)
+        arr_RGB_shape = list(arr_RGB_shape) #https://www.w3schools.com/python/gloss_python_change_tuple_item.asp
         arr_RGB_shape[2] = classes.shape[1]  
 
     arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
