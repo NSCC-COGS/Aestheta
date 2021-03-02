@@ -6,6 +6,7 @@ import pickle
 import re
 import requests
 import urllib.request
+import struct
 
 from datetime import datetime
 from matplotlib import pyplot as plt
@@ -91,6 +92,9 @@ def saveModel(classModel, classes, sillyName = None):
     #creates a string for the current time 
     now = datetime.now()
     uniqueString = now.strftime("%Y%m%d%H%M%S") #https://www.programiz.com/python-programming/datetime/strftime
+    
+    python_bits_user = struct.calcsize("P") * 8 #this will print 32 or 64 depending on python version
+    uniqueString += '_'+str(python_bits_user)
 
     if sillyName:
         uniqueString += '_'+sillyName
@@ -113,7 +117,11 @@ def loadModel(name = None, model_dir = 'Models/'):
             model_name_hack = model_name.replace('.','_')
             model_name_list = model_name_hack.split('_')
             date_time = int(model_name_list[1])
-            if date_time > maxDate:
+
+            python_bits_user = struct.calcsize("P") * 8 #this will print 32 or 64 depending on python version
+            python_bits_file = int(model_name_list[2])
+
+            if date_time > maxDate and python_bits_user == python_bits_file:
                 newest_model = model_name
                 maxDate = date_time
 
@@ -121,9 +129,15 @@ def loadModel(name = None, model_dir = 'Models/'):
             # print(model_name.split('_'))
             # a = re.split('_|.',model_name)
             # print(a)
-            
-    filename = model_dir+newest_model
-    print(filename)
+
+    try:        
+        filename = model_dir+newest_model
+        print(filename)
+    except:
+        print(f'No Model found for {python_bits_user} bit pythion')
+        filename = input("enter model path...")
+        return
+
     classModel, classes = pickle.load(open(filename, 'rb'))
 
     return classModel, classes
@@ -131,7 +145,11 @@ def loadModel(name = None, model_dir = 'Models/'):
 
 def classifyImage(img_RGB,classModel = None ,classes = None):
     if not classModel: # if no model set
-        classModel,classes = loadModel() #loads the most recent model
+        try:
+            classModel,classes = loadModel() #loads the most recent model
+        except:
+            print('no model found')
+            return 
 
     print('applying classification...')
     # Getting shape of the incoming file
@@ -311,7 +329,7 @@ if __name__ == '__main__':
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 0: #test model save
+    if 1: #test model save
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
