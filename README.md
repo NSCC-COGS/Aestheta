@@ -11,6 +11,22 @@ let's do this!
 
 Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite classification and other weird tests in our [experiments](/Experiments) section... 
 
+# Getting Started 
+
+To get going fast, try the following in a new (google colab)[https://colab.research.google.com/] notebook
+!git clone https://github.com/NSCC-COGS/Aestheta.git
+
+``` import Aestheta.Library.core as core ```
+
+``` core.getTile(source = 'google_sat', show=True) ```
+
+You should see earth appear - represented as a small numpy array! 
+Stay tuned for more simple examples of what were doing with this data. 
+
+# Requirements
+
+We reccomend python 3.8+ 64-bit. We use scikit-learn which includes numpy, imageIO. 
+
 # Earth is Special
 We're teaching an AI to understand what it means to be looking at our lovely planet. 
 
