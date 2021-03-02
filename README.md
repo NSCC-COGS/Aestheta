@@ -13,13 +13,13 @@ Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite c
 
 # Getting Started 
 
-To get going fast, try the following in a new (google colab)[https://colab.research.google.com/] notebook
+To get going fast, try the following in a new [Google Colab](https://colab.research.google.com/) notebook
 
 ```!git clone https://github.com/NSCC-COGS/Aestheta.git```
 
-``` import Aestheta.Library.core as core ```
+```import Aestheta.Library.core as core```
 
-``` core.getTile(source = 'google_sat', show=True) ```
+```core.getTile(source = 'google_sat', show=True)```
 
 You should see earth appear - represented as a small numpy array! 
 Stay tuned for more simple examples of what were doing with this data. 
