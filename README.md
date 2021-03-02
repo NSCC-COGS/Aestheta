@@ -14,7 +14,7 @@ Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite c
 # Getting Started 
 
 To get going fast, try the following in a new (google colab)[https://colab.research.google.com/] notebook
-!git clone https://github.com/NSCC-COGS/Aestheta.git
+```!git clone https://github.com/NSCC-COGS/Aestheta.git```
 
 ``` import Aestheta.Library.core as core ```
 
