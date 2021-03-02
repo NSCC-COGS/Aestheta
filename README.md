@@ -25,7 +25,7 @@ Stay tuned for more simple examples of what were doing with this data.
 
 # Requirements
 
-We reccomend python 3.8+ 64-bit. We use scikit-learn which includes numpy, imageIO. 
+We reccomend 64-bit python version 3.7.10 and higher. We use scikit-learn which includes numpy, imageIO. 
 
 # Earth is Special
 We're teaching an AI to understand what it means to be looking at our lovely planet. 
