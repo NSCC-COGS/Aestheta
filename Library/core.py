@@ -3,7 +3,30 @@ import urllib.request
 import os
 import requests
 import imageio
+import shapefile
 
+## function to read/load shapefiles based on file name
+def shpreader(fname, show = False):
+  
+  shp =  shapefile.Reader(fname)
+  
+  # show if show is passed as true
+  if show:
+    from matplotlib import pyplot as plt
+    
+    plt.figure()
+    
+    for shape in shp.shapeRecords():
+        x = [i[0] for i in shape.shape.points[:]]
+        y = [i[1] for i in shape.shape.points[:]]
+        plt.plot(x,y)
+    
+    plt.show()
+  
+  # close the reader object and return it
+  shp.close()
+  return shp
+    
 def getTile(xyz=[0,0,0], source = 'google_map', show=False):
     '''grabs a tile of a given xyz from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
