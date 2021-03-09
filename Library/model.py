@@ -121,6 +121,10 @@ class Model:
         
     def __repr__(self):
         return str(self)
+        
+    def dump_to_path(self, path):
+        with open(str(path), 'wb') as f:
+            self.dump(f)
                 
     def dump(self, f):
         pickle.dump([self.model, self.classes], f)
@@ -128,12 +132,11 @@ class Model:
     def save(self, label=None, dir_path='Models'):
         base_path = pathlib.Path(dir_path)
         name = ModelName(label=label)
-        
         path = base_path / name.filename
-        with open(str(path), 'wb') as f:
-            self.dump(f)
+        self.dump_to_path(path)
             
 if __name__ == '__main__':
     print(Model.load_named_or_latest(filename='simpleClassifier_20210302180953_64_HelloEarth100.aist'))
-    print(Model.load_named_or_latest())
     print(ModelName.latest_in_path('/'))
+    model = Model.load_named_or_latest()
+    model.save(label='test')
