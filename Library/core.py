@@ -1,17 +1,23 @@
-import imageio
+# Standard Library
 import math
-import numpy as np
 import os
 import pickle
 import re
-import requests
 import urllib.request
 import struct
 
 from datetime import datetime
+
+# Third-party
+import imageio
+import numpy as np
+import requests
+
 from matplotlib import pyplot as plt
 from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
+
+# Local
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
