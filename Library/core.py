@@ -18,6 +18,7 @@ from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
+from .model import Model
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
@@ -111,43 +112,9 @@ def saveModel(classModel, classes, sillyName = None):
     pickle.dump(model, open(filename, 'wb'))
     print('complete..')
 
-def loadModel(name = None, model_dir = 'Models/'):
-    model_list = os.listdir(model_dir)
-    print(model_list)
-
-    if name == None: #loads most recent
-        maxDate = 0 
-        newest_model = None
-        print('getting most recent model')
-        for model_name in model_list:
-            model_name_hack = model_name.replace('.','_')
-            model_name_list = model_name_hack.split('_')
-            date_time = int(model_name_list[1])
-
-            python_bits_user = struct.calcsize("P") * 8 #this will print 32 or 64 depending on python version
-            python_bits_file = int(model_name_list[2])
-
-            if date_time > maxDate and python_bits_user == python_bits_file:
-                newest_model = model_name
-                maxDate = date_time
-
-            print(date_time)
-            # print(model_name.split('_'))
-            # a = re.split('_|.',model_name)
-            # print(a)
-
-    try:        
-        filename = model_dir+newest_model
-        print(filename)
-    except:
-        print(f'No Model found for {python_bits_user} bit pythion')
-        filename = input("enter model path...")
-        return
-
-    classModel, classes = pickle.load(open(filename, 'rb'))
-
-    return classModel, classes
-
+def loadModel(name=None, model_dir='Models'):
+    model = Model.load_named_or_latest(filename=name, dir_path=model_dir)
+    return model.model, model.classes
 
 def classifyImage(img_RGB,classModel = None ,classes = None):
     if not classModel: # if no model set
@@ -340,16 +307,19 @@ if __name__ == '__main__':
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 1: #test model save
+    if 0: #test model save
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
 
         saveModel(classModel, classes, sillyName = 'HelloEarth100')
 
-    if 0: #test load model
+    if 1: #test load model
         img_RGB = getTile(source = 'google_sat')
+        classModel, classes = loadModel(name='simpleClassifier_20210302180953_64_HelloEarth100.aist')
+        print('Loaded model by name')
         classModel, classes = loadModel()
+        print('Loaded model omitting name')
         img_class = classifyImage(img_RGB, classModel, classes)
         
         plt.imshow(img_class)
@@ -375,7 +345,7 @@ if __name__ == '__main__':
         plt.imshow(img_class)
         plt.show()
 
-    if 1: #test 3x3 classifier 
+    if 0: #test 3x3 classifier 
         xyz_novaScotia = [41,45,7]
         img_RGB = getTiles_3x3(xyz = xyz_novaScotia, source = 'google_sat')
         img_class = classifyImage(img_RGB)
