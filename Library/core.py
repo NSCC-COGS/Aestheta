@@ -91,26 +91,10 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
         ).fit(arr_RGB_subsample, arr_classes_subsample)
 
     return classModel, classes
-
-def saveModel(classModel, classes, sillyName = None):
-    #puts the classificaion model and the classes into a list 
-    model = [classModel, classes]
-
-    #creates a string for the current time 
-    now = datetime.now()
-    uniqueString = now.strftime("%Y%m%d%H%M%S") #https://www.programiz.com/python-programming/datetime/strftime
     
-    python_bits_user = struct.calcsize("P") * 8 #this will print 32 or 64 depending on python version
-    uniqueString += '_'+str(python_bits_user)
-
-    if sillyName:
-        uniqueString += '_'+sillyName
-
-    #saves out the model list with a name from the current time
-    filename = f'Models/simpleClassifier_{uniqueString}.aist'
-    print('saving model to',filename)
-    pickle.dump(model, open(filename, 'wb'))
-    print('complete..')
+def saveModel(classModel, classes, sillyName=None):
+    model = Model(model=classModel, classes=classes)
+    model.save(label=sillyName)
 
 def loadModel(name=None, model_dir='Models'):
     model = Model.load_named_or_latest(filename=name, dir_path=model_dir)
@@ -307,12 +291,13 @@ if __name__ == '__main__':
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 0: #test model save
+    if 1: #test model save
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
-
+        print('Testing model save')
         saveModel(classModel, classes, sillyName = 'HelloEarth100')
+        print('Model saved')
 
     if 1: #test load model
         img_RGB = getTile(source = 'google_sat')

@@ -129,7 +129,7 @@ class Model:
         base_path = pathlib.Path(dir_path)
         name = ModelName(label=label)
         
-        path = base_path / name.path
+        path = base_path / name.filename
         with open(str(path), 'wb') as f:
             self.dump(f)
             
