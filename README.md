@@ -37,5 +37,3 @@ There is lots of great data available and tools we can use! Early results are ve
 
 ![Hello Earth](/Images/HelloEarth.png)
 
-![Aestheta today](/Images/Aestheta_today.png)
-
