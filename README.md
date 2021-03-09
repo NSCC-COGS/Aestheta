@@ -36,3 +36,6 @@ We're teaching an AI to understand what it means to be looking at our lovely pla
 There is lots of great data available and tools we can use! Early results are very promising. 
 
 ![Hello Earth](/Images/HelloEarth.png)
+
+![Aestheta today](/Images/Aestheta_today.png)
+
