@@ -179,6 +179,10 @@ def classifyImage(img_RGB,classModel = None ,classes = None):
 
 def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
     x,y,z = xyz
+
+    if isinstance(x, float) and isinstance(y, float):
+        x, y, z = tile_from_coords(x, y, z)
+        
     idx = [-1,0,1]
     # idx = [-2-1,0,1,2]
     img = 'Start'
