@@ -135,4 +135,5 @@ class Model:
             
 if __name__ == '__main__':
     print(Model.load_named_or_latest(filename='simpleClassifier_20210302180953_64_HelloEarth100.aist'))
+    print(Model.load_named_or_latest())
     print(ModelName.latest_in_path('/'))
