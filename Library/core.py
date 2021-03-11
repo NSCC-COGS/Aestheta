@@ -148,7 +148,7 @@ def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
         for k in idx:
             print(j,k)
             tile_img = getTile(xyz=[x+j,y+k,z], source = source, show=False)
-            print(f"tile image shape {tile_img.shape}")
+            #print(f"tile image shape {tile_img.shape}")
             if img == 'Start':
                 img = np.zeros((tile_img.shape[0]*3,tile_img.shape[1]*3,tile_img.shape[2]),dtype=tile_img.dtype) 
             x0 = (j+1)*tile_img.shape[0]
