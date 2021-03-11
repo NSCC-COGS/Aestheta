@@ -192,10 +192,10 @@ def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
             print(j,k)
             tile_img = getTile(xyz=[x+j,y+k,z], source = source, show=False)
             if img == 'Start':
-                img = np.zeros((256*3,256*3,3),dtype=tile_img.dtype) # this will certainly throw an error when input images are more than 3 bands
-            x0 = (j+1)*256
-            y0 = (k+1)*256
-            img[y0:y0+256,x0:x0+256] = tile_img
+                img = np.zeros((tile_img.shape[0]*3,tile_img.shape[1]*3,tile_img.shape[2]),dtype=tile_img.dtype) 
+            x0 = (j+1)*tile_img.shape[0]
+            y0 = (k+1)*tile_img.shape[1]
+            img[y0:y0+tile_img.shape[0],x0:x0+tile_img.shape[1]] = tile_img
  
     if show:
         plt.imshow(img)
