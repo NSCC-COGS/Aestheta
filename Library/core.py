@@ -375,7 +375,9 @@ if __name__ == '__main__':
         
         # Second way to do it: just supply the Placemark name/alias to the
         # tile() function/method, and the TileSource will look it up.
-        # Explicitly set the zoom level to override the Placemark's default one.
+        #
+        # In this case, we explicitly set the zoom level to override the
+        # Placemark's default one.
         tile2 = google_maps.tile('cogs', zoom=5, layer='street')
         
         plt.imshow(tile2)
