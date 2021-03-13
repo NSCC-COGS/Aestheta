@@ -378,7 +378,25 @@ if __name__ == '__main__':
         #
         # In this case, we explicitly set the zoom level to override the
         # Placemark's default one.
-        tile2 = google_maps.tile('cogs', zoom=5, layer='street')
+        tile2 = google_maps.tile('cogs', zoom=9, layer='satellite')
         
         plt.imshow(tile2)
+        plt.show()
+        
+        # getTile is nice in that you can specify a map source and layer with
+        # one name, like google_map, google_sat, etc.
+        #
+        # TileSource lets you define aliases that can give you a source and
+        # a layer.
+        google_maps, layer = TileSource.get_alias('google_map')
+        tile3 = google_maps.tile('eiffel', layer=layer)
+        
+        plt.imshow(tile3)
+        plt.show()
+        
+        # This also works for MapSources that don't define layers.
+        openstreetmap, layer = TileSource.get_alias('osm')
+        tile4 = openstreetmap.tile('eiffel', layer=layer)
+        
+        plt.imshow(tile4)
         plt.show()
