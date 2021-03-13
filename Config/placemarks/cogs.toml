@@ -1,0 +1,19 @@
+# Every placemark should have a description.
+description = 'NSCC Centre of Geographic Sciences'
+
+# Every placemark must have a latitude and longitude:
+lat = 44.88514830522117
+lon = -65.1684601455184
+
+# This is the default zoom level for this placemark — a zoom level that shows
+# the placemark at an appropriate scale. If the placemark is a landmark, the
+# zoom level will probably be high; if the placemark is a whole city, the zoom
+# level will be much lower.
+#
+# You can override this default zoom level by specifying one explicitly when
+# you ask for a tile.
+#
+# The default zoom level is optional, but if you leave it out, you'll need to
+# specify the zoom level explicitly when you ask for a tile based on this
+# placemark.
+default_zoom = 15

@@ -1,0 +1,33 @@
+# Every placemark should have a description.
+description = 'Eiffel Tower'
+
+# Every placemark must have a latitude and longitude:
+lat = 48.8584
+lon = 2.2945
+
+# This is the default zoom level for this placemark — a zoom level that shows
+# the placemark at an appropriate scale. If the placemark is a landmark, the
+# zoom level will probably be high; if the placemark is a whole city, the zoom
+# level will be much lower.
+#
+# You can override this default zoom level by specifying one explicitly when
+# you ask for a tile.
+#
+# The default zoom level is optional, but if you leave it out, you'll need to
+# specify the zoom level explicitly when you ask for a tile based on this
+# placemark.
+default_zoom = 15
+
+# The name of the placemark is based on the name of the file, minus the
+# '.toml' suffix.
+#
+# This placemark's name will be 'eiffel_tower', so we can refer
+# to it in code as Placemark.get('eiffel_tower').
+#
+# Aliases let us refer to the placemark by other names, so we can also refer to
+# this placemark in code as Placemark.get('eiffel') or
+# Placemark.get('eiffel tower').
+#
+# Aliases are optional: you can always look up the placemark by it's 'official'
+# name.
+aliases = ['eiffel', 'eiffel tower']
