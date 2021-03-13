@@ -395,7 +395,7 @@ if __name__ == '__main__':
         
         # This also works for MapSources that don't define layers.
         openstreetmap, layer = TileSource.get_alias('osm')
-        tile4 = openstreetmap.tile('eiffel', layer=layer)
+        tile4 = openstreetmap.tile_3x3('eiffel', layer=layer)
         
         plt.imshow(tile4)
         plt.show()

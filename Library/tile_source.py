@@ -260,7 +260,7 @@ class TileSource:
         
         # For left, then centre, then right:
         for x_offset in offsets:
-            # For top, then middle, then bottom:
+            # For top, then middle, then bottom (uh, I think…)
             for y_offset in offsets:
                 # Grab the tile for this part of the mosaic.
                 tile = self.tile(
