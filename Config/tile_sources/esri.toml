@@ -1,0 +1,10 @@
+description = 'Esri'
+url_template = 'https://server.arcgisonline.com/ArcGIS/rest/services/{layer}/MapServer/tile/{zoom}/{y}/{x}'
+  
+[layer_key]
+satellite = 'World_Imagery'
+street = 'World_Street_Map'
+topo = 'World_Topo_Map'
+
+[aliases.esri]
+layer = 'topo'

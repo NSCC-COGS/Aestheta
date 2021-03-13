@@ -1,0 +1,12 @@
+description = 'Google Maps'
+url_template = 'https://mt.google.com/vt/lyrs={layer}&x={x}&y={y}&z={zoom}'
+
+[layer_key]
+satellite = 's'
+street = 'm'
+
+[aliases.google_map]
+layer = 'street'
+
+[aliases.google_sat]
+layer = 'satellite'

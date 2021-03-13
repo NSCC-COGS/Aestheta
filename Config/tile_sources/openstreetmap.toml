@@ -1,0 +1,4 @@
+description = 'OpenStreetMap'
+url_template = 'https://a.tile.openstreetmap.org/{zoom}/{x}/{y}.png'
+
+[aliases.osm]

@@ -1,0 +1,9 @@
+description = 'MapBox'
+access_token = 'pk.eyJ1Ijoicm5zcmciLCJhIjoiZTA0NmIwY2ZkYWJmMGZmMTAwNDYyNzdmYzkyODQyNDkifQ.djD5YCQzikYGFBo8pwiaNA'
+url_template = 'https://api.mapbox.com/v4/{layer}/{zoom}/{x}/{y}.png?access_token={access_token}'
+
+[layer_key]
+satellite = 'mapbox.satellite'
+
+[aliases.mapbox_sat]
+layer = 'satellite'
