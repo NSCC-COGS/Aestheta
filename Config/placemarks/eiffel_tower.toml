@@ -28,6 +28,6 @@ default_zoom = 15
 # this placemark in code as Placemark.get('eiffel') or
 # Placemark.get('eiffel tower').
 #
-# Aliases are optional: you can always look up the placemark by it's 'official'
+# Aliases are optional: you can always look up the placemark by its 'official'
 # name.
 aliases = ['eiffel', 'eiffel tower']
