@@ -353,7 +353,6 @@ if __name__ == '__main__':
         # Use Google Maps as our TileSource.
         google_maps = TileSource.get('google_maps')
         
-        
         # Use the Eiffel Tower as our Placemark.
         eiffel_tower = Placemark.get('eiffel_tower')
         
