@@ -292,7 +292,7 @@ if __name__ == '__main__':
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 1: #test model save
+    if 0: #test model save
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
@@ -300,7 +300,7 @@ if __name__ == '__main__':
         saveModel(classModel, classes, sillyName = 'HelloEarth100')
         print('Model saved')
 
-    if 1: #test load model
+    if 0: #test load model
         img_RGB = getTile(source = 'google_sat')
         classModel, classes = loadModel(name='simpleClassifier_20210302180953_64_HelloEarth100.aist')
         print('Loaded model by name')
@@ -337,4 +337,46 @@ if __name__ == '__main__':
         img_class = classifyImage(img_RGB)
 
         plt.imshow(img_class)
+        plt.show()
+        
+    if 1:
+        # Test Placemark and TileSource. This uses relative imports, so you have
+        # to run this with "python -m Library.core". "python Library/core.py"
+        # will give you an error!
+        from .placemark import Placemark
+        from .tile_source import TileSource
+        
+        # Need to load configs first…
+        Placemark.load_config()
+        TileSource.load_config()
+        
+        # Use Google Maps as our TileSource.
+        google_maps = TileSource.get('google_maps')
+        
+        
+        # Use the Eiffel Tower as our Placemark.
+        eiffel_tower = Placemark.get('eiffel_tower')
+        
+        # We can use aliases, too:
+        if Placemark.get('eiffel') == eiffel_tower:
+            print('Placemarks are identical.')
+        
+        # Feed the Eiffel Tower into Google Maps. Use the satellite layer.
+        # The Eiffel tower has a default zoom level, so we don't have to specify
+        # one.
+        print(
+            f'Getting tile for {eiffel_tower.description}. Default zoom level'
+            f' is {eiffel_tower.default_zoom}.'
+        )
+        tile1 = google_maps.tile(eiffel_tower, layer='satellite')
+        
+        plt.imshow(tile1)
+        plt.show()
+        
+        # Second way to do it: just supply the Placemark name/alias to the
+        # tile() function/method, and the TileSource will look it up.
+        # Explicitly set the zoom level to override the Placemark's default one.
+        tile2 = google_maps.tile('cogs', zoom=5, layer='street')
+        
+        plt.imshow(tile2)
         plt.show()
