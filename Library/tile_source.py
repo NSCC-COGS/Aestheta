@@ -218,7 +218,7 @@ class TileSource:
             x, y = location
             zoom2 = zoom
             
-        zoom3 = zoom2 if zoom != None else 15
+        zoom3 = zoom2 if zoom2 != None else 15
         
         if isinstance(x, float) and isinstance(y, float):
             x, y = self.xy_from_lon_lat((x, y), zoom3)
@@ -229,10 +229,10 @@ class TileSource:
     # a given zoom level (0-15), and a given layer (e.g. 'street' or
     # 'satellite'), required if the tile source uses layers.
     def tile(self, location=(0, 0), zoom=None, layer=None):
-        xy, zoom = self.xy_zoom_from_location(location, zoom)
+        xy, zoom2 = self.xy_zoom_from_location(location, zoom)
             
         # Get the URL for this tile.
-        url = self.url(xy, zoom, layer)
+        url = self.url(xy, zoom2, layer)
         
         # Request the URL.
         response = requests.get(
@@ -247,7 +247,7 @@ class TileSource:
         
     # Grabs a 3x3 mosaic of tiles, with the specified tile at the centre.
     def tile_3x3(self, location=(0, 0), zoom=None, layer=None):
-        (x, y), zoom = self.xy_zoom_from_location(location, zoom)
+        (x, y), zoom2 = self.xy_zoom_from_location(location, zoom)
             
         # These offsets represent left, centre, and right, horizontally, and
         # top, middle, and bottom, vertically. The product of these gives us
@@ -264,7 +264,7 @@ class TileSource:
             for y_offset in offsets:
                 # Grab the tile for this part of the mosaic.
                 tile = self.tile(
-                    location=(x + x_offset, y + y_offset), zoom=zoom,
+                    location=(x + x_offset, y + y_offset), zoom=zoom2,
                     layer=layer
                 )
                 
