@@ -12,6 +12,7 @@ from datetime import datetime
 import imageio
 import numpy as np
 import requests
+import shapefile
 
 from matplotlib import pyplot as plt
 from scipy import ndimage
@@ -33,6 +34,25 @@ except ImportError as error:
 
 Placemark.load_config()
 TileSource.load_config()
+
+## function to read/load shapefiles based on file name
+def shpreader(fname, show = False):
+    shp = shapefile.Reader(fname)
+    
+    # show if show is passed as true
+    if show:
+        plt.figure()
+        
+        for shape in shp.shapeRecords():
+            x = [i[0] for i in shape.shape.points[:]]
+            y = [i[1] for i in shape.shape.points[:]]
+            plt.plot(x,y)
+        
+        plt.show()
+        
+    # close the reader object and return it
+    shp.close()
+    return shp
 
 def getTile(xyz=[0,0,0], source='google_map', show=False):
     source2, layer = TileSource.get_alias(source)
