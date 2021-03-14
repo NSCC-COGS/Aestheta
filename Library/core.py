@@ -19,18 +19,9 @@ from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
-try:
-    from .model import Model
-    from .placemark import Placemark
-    from .tile_source import TileSource
-except ImportError as error:
-    from pathlib import Path
-    
-    this_file = Path(__file__).name
-    raise ImportError(
-        f'Running {this_file} directly is no longer supported. From now on,'
-        f' go to the Aestheta directory and use "python -m Library.core"'
-    ) from error
+from .model import Model
+from .placemark import Placemark
+from .tile_source import TileSource
 
 Placemark.load_config()
 TileSource.load_config()
