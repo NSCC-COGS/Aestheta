@@ -18,59 +18,41 @@ from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
-from .model import Model
+try:
+    from .model import Model
+    from .placemark import Placemark
+    from .tile_source import TileSource
+except ImportError as error:
+    from pathlib import Path
+    
+    this_file = Path(__file__).name
+    raise ImportError(
+        f'Running {this_file} directly is no longer supported. From now on,'
+        f' go to the Aestheta directory and use "python -m Library.core"'
+    ) from error
 
-# Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
-def tile_from_coords(lon, lat, zoom):
-    lat_rad = math.radians(lat)
-    n = 2.0 ** zoom
-    tile_x = int((lon + 180.0) / 360.0 * n)
-    tile_y = int((1.0 - math.asinh(math.tan(lat_rad)) / math.pi) / 2.0 * n)
-    return [tile_x, tile_y, zoom]
-
-# Adapted from num2deg at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
-def coords_from_tile(tile_x, tile_y, zoom):
-    n = 2.0 ** zoom
-    lon_deg = tile_x / n * 360.0 - 180.0
-    lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * tile_y / n)))
-    lat_deg = math.degrees(lat_rad)
-    return [lon_deg, lat_deg, zoom]
+Placemark.load_config()
+TileSource.load_config()
 
 def getTile(xyz=[0,0,0], source='google_map', show=False):
-    '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
-    note: these services are not meant to be web scraped and should not be accessed excessively'''
-
-    # If our coords are floats, assume we're dealing with lat and long, and
-    # convert them to tile x, y, z.
-    x, y, z = xyz
-    if isinstance(x, float) and isinstance(y, float):
-        x, y, z = tile_from_coords(x, y, z)
-
-    print(x, y, z)
-
-    if source == 'google_map':
-        url = f'http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
-    elif source == 'google_sat':
-        url = f'http://mt.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
-    elif source == 'osm_map':
-        url = f'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    elif source == 'mapbox_sat':
-        TOKEN = 'pk.eyJ1Ijoicm5zcmciLCJhIjoiZTA0NmIwY2ZkYWJmMGZmMTAwNDYyNzdmYzkyODQyNDkifQ.djD5YCQzikYGFBo8pwiaNA'
-        url = f'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token={TOKEN}'
-    elif source == 'esri':
-        # otiles was down so replaced with esri - a nice source
-        url = f'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
-
-    #creates a header indicating a user browser to bypass blocking, note this is not meant for exhaustive usage
-    headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
-    res = requests.get(url, stream=True, headers=headers)
-    img = imageio.imread(res.content)
+    source2, layer = TileSource.get_alias(source)
+    tile = source2.tile(xyz, zoom=None, layer=layer)
 
     if show:
-        plt.imshow(img)
+        plt.imshow(tile)
         plt.show()
-    else:
-        return img
+        
+    return tile
+    
+def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
+    source2, layer = TileSource.get_alias(source)
+    tile = source2.tile_3x3(xyz, zoom=None, layer=layer)
+    
+    if show:
+        plt.imshow(tile)
+        plt.show()
+        
+    return tile
 
 def simpleClassifier(img_RGB, img_features, subsample = 100):
     print('training  classifier...')
@@ -123,44 +105,6 @@ def classifyImage(img_RGB,classModel = None ,classes = None):
     img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
     
     return img_class
-  
-#def classifyImage(img_RGB,classModel,classes):
-#    print('applying classification...')
-#    arr_RGB_shape = img_RGB.shape
-#    arr_RGB = img_RGB.reshape(-1, img_RGB.shape[-1])
-#    arr_classes_model = classModel.predict(arr_RGB)
-#    arr_label_model = classes[arr_classes_model]
-#    img_class = np.reshape(arr_label_model,arr_RGB_shape) #hard coded for 256x256 images!
-#
-#    return img_class
-
-def getTiles_3x3(xyz=[0,0,0], source = 'google_map', show=False):
-    x,y,z = xyz
-
-    # check if input are coordinates (float)
-    if isinstance(x, float) and isinstance(y, float):
-        x, y, z = tile_from_coords(x, y, z)
-
-    idx = [-1,0,1]
-    # idx = [-2-1,0,1,2]
-    img = 'Start'
-    for j in idx:
-        for k in idx:
-            print(j,k)
-            tile_img = getTile(xyz=[x+j,y+k,z], source = source, show=False)
-            #print(f"tile image shape {tile_img.shape}")
-            if img == 'Start':
-                img = np.zeros((tile_img.shape[0]*3,tile_img.shape[1]*3,tile_img.shape[2]),dtype=tile_img.dtype) 
-            x0 = (j+1)*tile_img.shape[0]
-            y0 = (k+1)*tile_img.shape[1]
-            img[y0:y0+tile_img.shape[0],x0:x0+tile_img.shape[1]] = tile_img
- 
-    if show:
-        plt.imshow(img)
-        plt.show()
-
-    else:
-        return img
 
 def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
     x,y,z = xyz
@@ -275,16 +219,11 @@ if __name__ == '__main__':
         plt.imshow(img_RGB_c)
         plt.show()
         
-    if 0: # Test image convolution with coordinate transforms.
+    if 0:
         # Coordinates of NSCC COGS; zoom level 15
         lat, lon, z = 44.88516350846845, -65.16834212839683, 15
-        
-        # Convert coords -> tile -> coords
-        x1, y1, z1 = tile_from_coords(lon, lat, z)
-        x2, y2, z2 = coords_from_tile(x1, y1, z1)
-        
-        # Feed resulting lon, lat, z to getTile.
-        img_RGB = getTile(xyz = [x2, y2, z2], source = 'google_sat')
+
+        img_RGB = getTile(xyz=[lon, lat, z], source='google_sat')
         img = img_RGB[:,:,0]
         img_c = image_convolution(img)
 
@@ -339,16 +278,10 @@ if __name__ == '__main__':
         plt.imshow(img_class)
         plt.show()
         
-    if 1:
+    if 0:
         # Test Placemark and TileSource. This uses relative imports, so you have
         # to run this with "python -m Library.core". "python Library/core.py"
         # will give you an error!
-        from .placemark import Placemark
-        from .tile_source import TileSource
-        
-        # Need to load configs first…
-        Placemark.load_config()
-        TileSource.load_config()
         
         # Use Google Maps as our TileSource.
         google_maps = TileSource.get('google_maps')
@@ -399,3 +332,11 @@ if __name__ == '__main__':
         
         plt.imshow(tile4)
         plt.show()
+    if 1:
+        getTile(xyz=[41, 45, 7], source='mapbox_sat', show=True)
+        getTile(xyz=[-65.17, 44.89, 15], source='osm', show=True)
+        getTile(xyz=['eiffel', 7], source='esri', show=True)
+        getTile('eiffel', show=True)
+        
+        cogs = Placemark.get('cogs')
+        getTile(cogs, show=True)
