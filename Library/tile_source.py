@@ -104,6 +104,9 @@ class TileSource:
             # original names.
             for alias, attrs in source.aliases.items():
                 self.aliases[alias] = (source, attrs.get('layer'))
+                
+        # Change our directory back
+        os.chdir(previous_dir)
         
     @classmethod
     def load_file(self, path):
@@ -183,6 +186,8 @@ class TileSource:
                 f' key is given.'
             )
             
+    # The following two functions are adapted from https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2        
+    
     # Get a tile (x, y) index from a lat, long and zoom level.
     def xy_from_lon_lat(self, lon_lat=(0.0, 0.0), zoom=0):
         lon, lat = lon_lat
@@ -200,6 +205,24 @@ class TileSource:
         lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * y / n)))
         lat_deg = math.degrees(lat_rad)
         return (lon_deg, lat_deg)
+        
+    def location_zoom_from_xyz(self, xyz=[0, 0, 0]):
+        location, zoom = (0, 0), 0
+        try:
+            # Assume xyz has three elements: x (or lon), y (or lat), and zoom.
+            x, y, zoom = xyz
+            location = (x, y)
+        except ValueError:
+            try:
+                # Assume xyz has two elements: location, e.g. 'eiffel', and
+                # zoom.
+                location, zoom = xyz
+            except ValueError:
+                # Assume xyz is one element: location.
+                location = xyz
+                zoom = None
+                
+        return location, zoom
         
     def xy_zoom_from_location(self, location=(0, 0), zoom=None):
         if isinstance(location, str):
@@ -224,15 +247,33 @@ class TileSource:
             x, y = self.xy_from_lon_lat((x, y), zoom3)
                 
         return (x, y), zoom3
+        
+    def xy_zoom_from_xyz(self, xyz=[0, 0, 0]):
+        location, zoom = self.location_zoom_from_xyz(xyz)
+        return self.xy_zoom_from_location(location, zoom)
             
     # Get a single tile at a given x/y (can be tile coords or lon, lat), at
     # a given zoom level (0-15), and a given layer (e.g. 'street' or
     # 'satellite'), required if the tile source uses layers.
     def tile(self, location=(0, 0), zoom=None, layer=None):
-        xy, zoom2 = self.xy_zoom_from_location(location, zoom)
+        if isinstance(location, list):
+            xy, zoom2 = self.xy_zoom_from_xyz(location)
+        else:
+            xy, zoom2 = self.xy_zoom_from_location(location, zoom)
+            
+        if __debug__:
+            print(
+                f'Tile requested for location {repr(location)} zoom {zoom}'
+                f' from {repr(self)} layer {repr(layer)}.'
+            )
             
         # Get the URL for this tile.
         url = self.url(xy, zoom2, layer)
+        if __debug__:
+            print(
+                f'Getting tile {xy} zoom {zoom2} from {repr(self)}'
+                f' layer {repr(layer)} at {url}\n'
+            )
         
         # Request the URL.
         response = requests.get(
