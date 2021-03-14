@@ -12,6 +12,7 @@ from datetime import datetime
 import imageio
 import numpy as np
 import requests
+import shapefile
 
 from matplotlib import pyplot as plt
 from scipy import ndimage
@@ -19,6 +20,27 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
 from .model import Model
+
+## function to read/load shapefiles based on file name
+def shpreader(fname, show = False):
+  shp =  shapefile.Reader(fname)
+  
+  # show if show is passed as true
+  if show:
+    from matplotlib import pyplot as plt
+    
+    plt.figure()
+    
+    for shape in shp.shapeRecords():
+        x = [i[0] for i in shape.shape.points[:]]
+        y = [i[1] for i in shape.shape.points[:]]
+        plt.plot(x,y)
+    
+    plt.show()
+  
+  # close the reader object and return it
+  shp.close()
+  return shp
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
