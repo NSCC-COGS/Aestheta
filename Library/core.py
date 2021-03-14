@@ -27,8 +27,6 @@ def shpreader(fname, show = False):
     
     # show if show is passed as true
     if show:
-        from matplotlib import pyplot as plt
-        
         plt.figure()
         
         for shape in shp.shapeRecords():
