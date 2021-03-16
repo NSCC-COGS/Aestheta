@@ -1,3 +1,7 @@
+"""
+    TODO: Document this module!
+"""
+
 import os
 import sys
 
@@ -5,23 +9,31 @@ from pathlib import Path
 
 import toml
 
+
 class Placemark:
+    """
+        TODO: Document this class!
+    """
+
     _placemarks = {}
     _aliases = {}
-    
+
     @classmethod
-    def get(self, term):
-        return self._placemarks.get(term) or self._aliases.get(term)
-    
-    # Load Placemark config from a directory.
+    def get(cls, term):
+        """Get a placemark from config, by name or by alias."""
+
+        return cls._placemarks.get(term) or cls._aliases.get(term)
+
     @classmethod
-    def load_config(self, base_path='Config/placemarks'):
-        self._placemarks = {}
-        self._aliases = {}
-        
+    def load_config(cls, base_path='Config/placemarks'):
+        """Load Placemark config from a directory."""
+
+        cls._placemarks = {}
+        cls._aliases = {}
+
         # Note our current directory
         previous_dir = os.getcwd()
-        
+
         # Change our directory to the base path
         os.chdir(base_path)
 
@@ -37,59 +49,63 @@ class Placemark:
             ]
             if path.is_file() and path.suffix == '.toml'
         ]
-        
+
         placemarks = []
         for path in paths:
             try:
                 # Try to load the placemark from the file and append it to
                 # our list of placemarks.
-                placemark = self.load_file(path)
+                placemark = cls.load_file(path)
                 placemarks.append(placemark)
             except toml.decoder.TomlDecodeError:
                 # If the toml library can't parse this file, it's probably not
                 # valid. Print a warning and skip this file.
                 print(
-                    f'{repr(self)} ignored {path} because it is not a valid'
+                    f'{repr(cls)} ignored {path} because it is not a valid'
                     f' TOML file.',
                     file=sys.stderr
                 )
             except ValueError as error:
-                # This could mean that the placemark didn't have a valid lat and
-                # lon. Print a warning and skip this file.
+                # This could mean that the placemark didn't have a valid lat
+                # and lon. Print a warning and skip this file.
                 print(
-                    f'{repr(self)} ignored {path} because {error}',
+                    f'{repr(cls)} ignored {path} because {error}',
                     file=sys.stderr
                 )
-                
+
         for placemark in placemarks:
-            self._placemarks[placemark.name] = placemark
+            cls._placemarks[placemark.name] = placemark
             for alias in placemark.aliases:
-                self._aliases[alias] = placemark
+                cls._aliases[alias] = placemark
 
         # Change our directory back
         os.chdir(previous_dir)
-        
+
     @classmethod
-    def load_file(self, path):
+    def load_file(cls, path):
+        """Load a placemark config file, by path."""
+
         path2 = Path(path)
-        
+
         # In the case of a file named eiffel_tower.toml, eiffel_tower is the
         # stem, and .toml is the suffix. Use the stem as the 'official' name of
         # this placemark.
         name = path2.stem
-        with open(str(path2)) as f:
-            return self.load(f, name)
-        
+        with open(str(path2)) as descriptor:
+            return cls.load(descriptor, name)
+
     @classmethod
-    def load(self, f, name):
-        # Use the toml library to read the file into config. A TOML file
-        # with this text:
+    def load(cls, descriptor, name):
+        """Load a placemark config file, by file descriptor."""
+
+        # A TOML file with this text:
         #
         # description = 'NSCC Centre of Geographic Sciences'
         # lat = 44.88514830522117
         # lon = -65.1684601455184
         #
-        # Gets turned into a Python dict (key/value store) that looks like this:
+        # Gets turned into a Python dict (key/value store) that looks like
+        # this:
         #
         # {
         #     'description': 'NSCC Centre of Geographic Sciences',
@@ -98,8 +114,8 @@ class Placemark:
         # }
         #
         # And we assign that to config.
-        config = toml.load(f)
-        
+        config = toml.load(descriptor)
+
         # Make a new placemark with the config we got from the file.
         #
         # **config breaks config out into keyword arguments. Using the sample
@@ -116,13 +132,13 @@ class Placemark:
         # etc.) creates a new Placemark. The arguments to this function go to
         # the __init__ function, which prepares a placemark, which is initially
         # blank, for use.
-        # 
+        #
         # If __init__ is successful, we get a new Placemark, ready to use, and
         # can assign that to our placemark variable.
-        placemark = self(name=name, **config)
-        
+        placemark = cls(name=name, **config)
+
         return placemark
-        
+
     # When we create a new Placemark object, Python calls its __init__ method
     # (function) to initialize it.
     #
@@ -130,10 +146,10 @@ class Placemark:
     # give self as the first argument to any function (method) you define in a
     # class.
     def __init__(self, name='', description='',
-            lat=None, lon=None, default_zoom=None, aliases = []):
+                 lat=None, lon=None, default_zoom=None, aliases=[]):
         self.name = name
         self.description = description
-        
+
         # Make sure we have both latitude and longitude!
         if isinstance(lat, float) and isinstance(lon, float):
             self.xy = (lon, lat)
@@ -143,10 +159,10 @@ class Placemark:
                 f'{repr(self)} expects floating point values'
                 f' for both lat and lon, but got {repr(lat)} and {repr(lon)}.'
             )
-        
+
         self.default_zoom = default_zoom
         self.aliases = aliases
-        
+
     # This overrides what we see when we inspect a Placemark in an interactive
     # Python session. For example, when we do this:
     #
