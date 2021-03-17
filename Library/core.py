@@ -12,18 +12,18 @@ from datetime import datetime
 import imageio
 import numpy as np
 import requests
-import shapefile
+# import shapefile # temporarily removed so our code works in colab!
 
 from matplotlib import pyplot as plt
 from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
-from .model import Model
+# from .model import Model # currently not working
 
 ## function to read/load shapefiles based on file name
 def shpreader(fname, show = False):
-    shp = shapefile.Reader(fname)
+    shp = shapefile.Reader(fname) # note this currently wont work!
     
     # show if show is passed as true
     if show:
@@ -255,7 +255,7 @@ def image_convolution_RGB(img_RGB):
 
 if __name__ == '__main__':
     #for now we can put tests here!
-    if 0: #test load the wms tile
+    if 1: #test load the wms tile
         testTile = getTile()
         plt.imshow(testTile)
         plt.show()
@@ -375,7 +375,7 @@ if __name__ == '__main__':
         plt.imshow(img_class)
         plt.show()
         
-    if 1:
+    if 0: #not currently working
         # Test Placemark and TileSource. This uses relative imports, so you have
         # to run this with "python -m Library.core". "python Library/core.py"
         # will give you an error!
