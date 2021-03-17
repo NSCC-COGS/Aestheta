@@ -210,8 +210,8 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
         return img
     
     
-# Testing Nomal Difference    
-def norm_diff(img_RGB, show=True):
+# Testing Nomal Difference 
+def norm_diff(img_RGB, B1, B2, show=True):
   img_RGB = core.getTile([x,y],source='google_sat', show=False)
   ND = core.norm_diff(IMG_RGB, B1=1, B2=2)
     
