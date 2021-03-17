@@ -19,26 +19,31 @@ from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
-# from .model import Model # currently not working
+# Nothing here yet!
 
 ## function to read/load shapefiles based on file name
-def shpreader(fname, show = False):
-    shp = shapefile.Reader(fname) # note this currently wont work!
-    
-    # show if show is passed as true
-    if show:
-        plt.figure()
-        
-        for shape in shp.shapeRecords():
-            x = [i[0] for i in shape.shape.points[:]]
-            y = [i[1] for i in shape.shape.points[:]]
-            plt.plot(x,y)
-        
-        plt.show()
-        
-    # close the reader object and return it
-    shp.close()
-    return shp
+#
+# This won't work without the shapefile dependency, so I've commented it out.
+# We can bring it back in once we've finished converting this to a Python
+# package.
+#
+# def shpreader(fname, show = False):
+#     shp = shapefile.Reader(fname) # note this currently wont work!
+#     
+#     # show if show is passed as true
+#     if show:
+#         plt.figure()
+#         
+#         for shape in shp.shapeRecords():
+#             x = [i[0] for i in shape.shape.points[:]]
+#             y = [i[1] for i in shape.shape.points[:]]
+#             plt.plot(x,y)
+#         
+#         plt.show()
+#         
+#     # close the reader object and return it
+#     shp.close()
+#     return shp
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
@@ -257,18 +262,18 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
 
     else:
         return img
-    
-    
-# Testing Nomal Difference 
-def norm_diff(img_RGB, B1, B2, show=True):
-    img_RGB = getTile([x,y],source='google_sat', show=False)
-    ND = norm_diff(IMG_RGB, B1=1, B2=2)
 
-    if show:
-        plt.imshow(ND)
-        plt.show()
-    else:
-        return ND
+# Testing Nomal Difference 
+# This function still has a few errors, so I've commented it out for now.
+# def norm_diff(img_RGB, B1, B2, show=True):
+#     img_RGB = getTile([x,y],source='google_sat', show=False)
+#     ND = norm_diff(IMG_RGB, B1=1, B2=2)
+#
+#     if show:
+#         plt.imshow(ND)
+#         plt.show()
+#     else:
+#         return ND
 
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
     img_shifted = np.roll(img_RGB,distance,axis=axis)
