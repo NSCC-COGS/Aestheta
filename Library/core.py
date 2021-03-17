@@ -212,18 +212,14 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
     
 # Testing Nomal Difference 
 def norm_diff(img_RGB, B1, B2, show=True):
-  img_RGB = core.getTile([x,y],source='google_sat', show=False)
-  ND = core.norm_diff(IMG_RGB, B1=1, B2=2)
-    
-    
-  if show:
-    plt.imshow(ND)
-    plt.show()
-    
+    img_RGB = getTile([x,y],source='google_sat', show=False)
+    ND = norm_diff(IMG_RGB, B1=1, B2=2)
+
+    if show:
+        plt.imshow(ND)
+        plt.show()
   else:
-    return ND
-    
-    
+        return ND
     
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
     img_shifted = np.roll(img_RGB,distance,axis=axis)
