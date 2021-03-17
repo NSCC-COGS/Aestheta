@@ -208,7 +208,23 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
 
     else:
         return img
-
+    
+    
+# Testing Nomal Difference    
+def norm_diff(img_RGB, show=True):
+  img_RGB = core.getTile([x,y],source='google_sat', show=False)
+  ND = core.norm_diff(IMG_RGB, B1=1, B2=2)
+    
+    
+  if show:
+    plt.imshow(np)
+    plt.show()
+    
+  else:
+    return np
+    
+    
+    
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
     img_shifted = np.roll(img_RGB,distance,axis=axis)
     img = img_shifted*1.0 - img_RGB*1.0 #multiplying by 1.0 is a lazy way yo convert an array to float
