@@ -112,13 +112,62 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
 
     return classModel, classes
     
-def saveModel(classModel, classes, sillyName=None):
-    model = Model(model=classModel, classes=classes)
-    model.save(label=sillyName)
+def saveModel(classModel, classes, sillyName = None):
+    #puts the classificaion model and the classes into a list 
+    model = [classModel, classes]
 
-def loadModel(name=None, model_dir='Models'):
-    model = Model.load_named_or_latest(filename=name, dir_path=model_dir)
-    return model.model, model.classes
+    #creates a string for the current time 
+    now = datetime.now()
+    uniqueString = now.strftime("%Y%m%d%H%M%S") #https://www.programiz.com/python-programming/datetime/strftime
+    
+    python_bits_user = struct.calcsize("P") * 8 #this will print 32 or 64 depending on python version
+    uniqueString += '_'+str(python_bits_user)
+
+    if sillyName:
+        uniqueString += '_'+sillyName
+
+    #saves out the model list with a name from the current time
+    filename = f'Models/simpleClassifier_{uniqueString}.aist'
+    print('saving model to',filename)
+    pickle.dump(model, open(filename, 'wb'))
+    print('complete..')
+
+def loadModel(name = None, model_dir = 'Models/'):
+    model_list = os.listdir(model_dir)
+    print(model_list)
+
+    if name == None: #loads most recent
+        maxDate = 0 
+        newest_model = None
+        print('getting most recent model')
+        for model_name in model_list:
+            model_name_hack = model_name.replace('.','_')
+            model_name_list = model_name_hack.split('_')
+            date_time = int(model_name_list[1])
+
+            python_bits_user = struct.calcsize("P") * 8 #this will print 32 or 64 depending on python version
+            python_bits_file = int(model_name_list[2])
+
+            if date_time > maxDate and python_bits_user == python_bits_file:
+                newest_model = model_name
+                maxDate = date_time
+
+            print(date_time)
+            # print(model_name.split('_'))
+            # a = re.split('_|.',model_name)
+            # print(a)
+
+    try:        
+        filename = model_dir+newest_model
+        print(filename)
+    except:
+        print(f'No Model found for {python_bits_user} bit pythion')
+        filename = input("enter model path...")
+        return
+
+    classModel, classes = pickle.load(open(filename, 'rb'))
+
+    return classModel, classes
 
 def classifyImage(img_RGB,classModel = None ,classes = None):
     if not classModel: # if no model set
@@ -218,9 +267,9 @@ def norm_diff(img_RGB, B1, B2, show=True):
     if show:
         plt.imshow(ND)
         plt.show()
-  else:
+    else:
         return ND
-    
+
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
     img_shifted = np.roll(img_RGB,distance,axis=axis)
     img = img_shifted*1.0 - img_RGB*1.0 #multiplying by 1.0 is a lazy way yo convert an array to float
@@ -324,7 +373,7 @@ if __name__ == '__main__':
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 0: #test model save
+    if 1: #test model save
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
@@ -332,9 +381,7 @@ if __name__ == '__main__':
         saveModel(classModel, classes, sillyName = 'HelloEarth100')
         print('Model saved')
 
-    if 0: #test load model
-        img_RGB = getTile(source = 'google_sat')
-        classModel, classes = loadModel(name='simpleClassifier_20210302180953_64_HelloEarth100.aist')
+    if 1: #test load model
         print('Loaded model by name')
         classModel, classes = loadModel()
         print('Loaded model omitting name')
@@ -343,7 +390,7 @@ if __name__ == '__main__':
         plt.imshow(img_class)
         plt.show()
 
-    if 0: #test load model, multiple
+    if 1: #test load model, multiple
         ''' this is unreasonably slow!''' 
         classModel, classes = loadModel()
         img_RGB_1 = getTile(source = 'google_sat')
