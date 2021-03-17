@@ -7,3 +7,5 @@ Here are some more step by step guide for some of the procedures and tools used 
 [Performing some basic array manipulations](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Tutorials/basic_array_manipulations.ipynb)
 
 [Training Simple Models](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Tutorials/Training_Simple_Models.ipynb)
+
+[Working With Landsat Data](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Tutorials/work_with_landsat.ipynb)
