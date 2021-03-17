@@ -19,9 +19,9 @@ from scipy import ndimage
 from sklearn.ensemble import GradientBoostingClassifier
 
 # Local
-from .model import Model
-from .placemark import Placemark
-from .tile_source import TileSource
+from model import Model
+from placemark import Placemark
+from tile_source import TileSource
 
 Placemark.load_config()
 TileSource.load_config()

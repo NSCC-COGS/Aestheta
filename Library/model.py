@@ -8,7 +8,7 @@ from datetime import datetime
 # Third-party imports
 
 # Local imports
-from . import environment
+import environment
 
 class InvalidModelNameError(Exception):
     pass

@@ -12,7 +12,7 @@ import numpy as np
 import requests
 import toml
 
-from .placemark import Placemark
+from placemark import Placemark
 
 class TileSource:
     # The HTTP User-Agent header identifies the web browser, which can allow the
