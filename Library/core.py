@@ -217,11 +217,11 @@ def norm_diff(img_RGB, show=True):
     
     
   if show:
-    plt.imshow(np)
+    plt.imshow(ND)
     plt.show()
     
   else:
-    return np
+    return ND
     
     
     
