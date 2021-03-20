@@ -17,7 +17,7 @@
     
     <meta name="viewport" content="width=device-width,
         initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>#map_bc80f1925cb746778bb507e940e58ddd {
+    <style>#map_def2a11ac095457a9c9d2e11d08c58b8 {
         position: relative;
         width: 100.0%;
         height: 100.0%;
@@ -28,7 +28,7 @@
 </head>
 <body>    
     
-    <div class="folium-map" id="map_bc80f1925cb746778bb507e940e58ddd" ></div>
+    <div class="folium-map" id="map_def2a11ac095457a9c9d2e11d08c58b8" ></div>
 </body>
 <script>    
     
@@ -36,10 +36,10 @@
         var bounds = null;
     
 
-    var map_bc80f1925cb746778bb507e940e58ddd = L.map(
-        'map_bc80f1925cb746778bb507e940e58ddd', {
+    var map_def2a11ac095457a9c9d2e11d08c58b8 = L.map(
+        'map_def2a11ac095457a9c9d2e11d08c58b8', {
         center: [15, 0],
-        zoom: 2,
+        zoom: 2.5,
         maxBounds: bounds,
         layers: [],
         worldCopyJump: false,
@@ -49,8 +49,8 @@
 
 
     
-    var tile_layer_4635c55d057e4b97a81a3000fea3659e = L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    var tile_layer_2edb9b08361545fc9684d92636359229 = L.tileLayer(
+        'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
         {
         "attribution": null,
         "detectRetina": false,
@@ -61,5 +61,79 @@
         "opacity": 1,
         "subdomains": "abc",
         "tms": false
-}).addTo(map_bc80f1925cb746778bb507e940e58ddd);
+}).addTo(map_def2a11ac095457a9c9d2e11d08c58b8);
+    
+            var circle_marker_6525f3a5266a41b48daa7414d812560d = L.circleMarker(
+                [44.8851, -65.1684],
+                {
+  "bubblingMouseEvents": true,
+  "color": "magenta",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "magenta",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 500,
+  "stroke": true,
+  "weight": 3
+}
+                )
+                .addTo(map_def2a11ac095457a9c9d2e11d08c58b8);
+            
+    
+            var popup_9beb7cd250664b4d887229152a3c1d1a = L.popup({maxWidth: '100%'
+            
+            });
+
+            
+                var html_f63aadd0a4b14dd4b7faae244931b437 = $(`<div id="html_f63aadd0a4b14dd4b7faae244931b437" style="width: 100.0%; height: 100.0%;"><b>We're Learning Earth!</b></div>`)[0];
+                popup_9beb7cd250664b4d887229152a3c1d1a.setContent(html_f63aadd0a4b14dd4b7faae244931b437);
+            
+
+            circle_marker_6525f3a5266a41b48daa7414d812560d.bindPopup(popup_9beb7cd250664b4d887229152a3c1d1a)
+            ;
+
+            
+        
+    
+            var circle_marker_516aeafc0e5244cf87edd267f33a1439 = L.circleMarker(
+                [44.8851, -65.1684],
+                {
+  "bubblingMouseEvents": true,
+  "color": "magenta",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "magenta",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 200,
+  "stroke": true,
+  "weight": 3
+}
+                )
+                .addTo(map_def2a11ac095457a9c9d2e11d08c58b8);
+            
+    
+            var popup_45d8f1dbd2bb4477a4d1fb4cbcdb480f = L.popup({maxWidth: '100%'
+            
+            });
+
+            
+                var html_be4542cfe3c64d4fabe3baca84ad247b = $(`<div id="html_be4542cfe3c64d4fabe3baca84ad247b" style="width: 100.0%; height: 100.0%;"><b>Come Check us Out!</b></div>`)[0];
+                popup_45d8f1dbd2bb4477a4d1fb4cbcdb480f.setContent(html_be4542cfe3c64d4fabe3baca84ad247b);
+            
+
+            circle_marker_516aeafc0e5244cf87edd267f33a1439.bindPopup(popup_45d8f1dbd2bb4477a4d1fb4cbcdb480f)
+            ;
+
+            
+        
 </script>
