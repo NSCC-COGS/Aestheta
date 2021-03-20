@@ -13,6 +13,11 @@ let's do this!
 
 Check out our latest ['Hello Earth'](/Experiments/Hello_Earth.ipynb) satellite classification and other weird tests in our [experiments](/Experiments) section... 
 
+# We're Live! 
+
+kind of...
+You can see a website of sorts at https://nscc-cogs.github.io/Aestheta/
+
 # Getting Started 
 
 To get going fast, try the following in a new [Google Colab](https://colab.research.google.com/) notebook
