@@ -344,6 +344,14 @@ if __name__ == '__main__':
         ax2.imshow(img_features);ax2.axis('off');ax2.set_title('Features')
         ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
         plt.show()
+    
+    if 0: #test image normalising difference
+        
+        img_RGB = core.getTile([-63.5752,44.6488,2],source='google_sat')
+        ND = core.norm_diff(img_RGB,  B1=1, B2=2)
+        
+
+        
     if 0: #test image shift difference
         img_RGB = getTile(xyz = [41,45,7], source = 'google_sat')
         image_shift_diff(img_RGB[:,:,0], show=True)
