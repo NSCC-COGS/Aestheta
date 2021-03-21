@@ -267,10 +267,10 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
 # This function still has a few errors, so I've commented it out for now.
 
 def norm_diff(img_RGB, B1, B2, show=True):
-   img_B1 = img_RGB[:,:,B1]
-   img_B2 = img_RGB[:,:,B2]
-   ndiff = (img_B1 - img_B2) / (img_B1 + img_B2)
-
+    img_B1 = img_RGB[:,:,B1]
+    img_B2 = img_RGB[:,:,B2]
+    ndiff = (img_B1 - img_B2) / (img_B1 + img_B2)
+    
     if show:
         plt.imshow(ndiff)
         plt.show()
