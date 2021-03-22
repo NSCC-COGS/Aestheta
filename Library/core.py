@@ -356,8 +356,8 @@ if __name__ == '__main__':
     
     if 0: #test image normalising difference
         
-        img_RGB = core.getTile([-63.5752,44.6488,2],source='google_sat')
-        ND = core.norm_diff(img_RGB,  B1=1, B2=2)
+        img_RGB = getTile([-63.5752,44.6488,2],source='google_sat')
+        ND = norm_diff(img_RGB,  B1=1, B2=2)
         
 
         
