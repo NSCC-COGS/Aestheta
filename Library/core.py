@@ -266,23 +266,32 @@ def getTiles_experimental(xyz=[0,0,0], source = 'google_map', show=False):
 # Testing Nomalising Difference - 21/03/21
 # This function still has a few errors, so I've commented it out for now.
 
-def norm_diff(img_RGB, B1, B2, show=True):
-    # get bands from tile
-    img_B1 = img_RGB[:,:,B1]
-    img_B2 = img_RGB[:,:,B2]
+def norm_diff(img_RGB, B1, B2, show = False):
+    # get true band numbers (Bands 1 and 2 are index 0 and 1)
+    B1 = B1 - 1
+    B2 = B2 - 1
 
-    # convert to float32
-    img_B1 = np.float32(img_B1)
-    img_B2 = np.float32(img_B2)
-    
-    ndiff = (img_B1 - img_B2) / (img_B1 + img_B2)
-    
-    if show:
-        plt.imshow(ndiff)
-        plt.show()
+    # test if band selection was valid
+    if B1 >= 0 and B2 <= 2:
+        # get bands from tile
+        img_B1 = img_RGB[:,:,(B1)]
+        img_B2 = img_RGB[:,:,(B2)]
+        # convert to float32
+        img_B1 = np.float32(img_B1)
+        img_B2 = np.float32(img_B2)
+        #calculate normalized difference
+        ndiff = (img_B1 - img_B2) / (img_B1 + img_B2)
         
+        # plot with matplotlib if uses wants      
+        if show:
+            plt.imshow(ndiff)
+            plt.show()
+        else:
+            return ndiff
+    # show user error of they selected bands out of range
     else:
-        return ndiff
+        print("Select bands between 1 and 3")
+
 
 
 def image_shift_diff(img_RGB, show=False, axis=0, distance = 1):
