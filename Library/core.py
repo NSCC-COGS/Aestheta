@@ -272,7 +272,7 @@ def norm_diff(img_RGB, B1, B2, show = False):
     B2 = B2 - 1
 
     # test if band selection was valid
-    if B1 >= 0 and B2 <= 2:
+    if B1 in range(0,3) and B2 in range(0,3):
         # get bands from tile
         img_B1 = img_RGB[:,:,(B1)]
         img_B2 = img_RGB[:,:,(B2)]
