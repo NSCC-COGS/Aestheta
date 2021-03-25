@@ -31,12 +31,12 @@ with pathlib.Path('requirements.txt').open() as requirements_txt:
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
-    name='Crystal',
+    name='Aestheta',
     url='https://github.com/NSCC-COGS/Aestheta',
     author='NSCC-COGS',
     author_email='kevin.mcguigan@nscc.ca',
     # Needed to actually package something
-    packages=['crystal'],
+    packages=['Library'],
     # Needed for dependencies
     install_requires=['numpy','pyshp'],
     
