@@ -36,7 +36,7 @@ setup(
     author='NSCC-COGS',
     author_email='kevin.mcguigan@nscc.ca',
     # Needed to actually package something
-    packages=['Library'],
+    packages=['crystal'],
     # Needed for dependencies
     install_requires=['numpy','pyshp'],
     
@@ -47,7 +47,7 @@ setup(
     version='1.0',
     # The license can be anything you like
     license='MIT',
-    description='Geospatial Machine Learning Toolkit',
+    description='A Geospatial Machine Learning Toolkit',
     # We will also need a readme eventually (there will be a warning)
     # long_description=open('README.txt').read(),
 )
