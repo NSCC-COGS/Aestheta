@@ -4,9 +4,25 @@ try: # for pip >= 10
 except ImportError: # for pip <= 9.0.3
     from pip.req import parse_requirements
 
-#testing
-parseTest = parse_requirements('requirements.txt', session='hack')
-print(parseTest)
+# #testing
+# parseTest = parse_requirements('requirements.txt', session='hack')
+# print(parseTest)
+
+
+# https://stackoverflow.com/questions/49689880/proper-way-to-parse-requirements-file-after-pip-upgrade-to-pip-10-x-x
+import pkg_resources
+import pathlib
+
+with pathlib.Path('requirements.txt').open() as requirements_txt:
+    install_requires = [
+        str(requirement)
+        for requirement
+        in pkg_resources.parse_requirements(requirements_txt)
+    ]
+
+
+# print(install_requires)
+# input('ok?')
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
@@ -19,7 +35,8 @@ setup(
     # Needed for dependencies
     # install_requires=['numpy'],
     #https://stackoverflow.com/questions/14399534/reference-requirements-txt-for-the-install-requires-kwarg-in-setuptools-setup-py
-    install_reqs = parse_requirements('requirements.txt', session='hack'),
+    # install_reqs = parse_requirements('requirements.txt', session='hack'),
+    install_reqs = install_requires,
     # *strongly* suggested for sharing
     version='1.0',
     # The license can be anything you like
