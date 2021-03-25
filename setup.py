@@ -1,4 +1,5 @@
 from setuptools import setup
+from pip.req import parse_requirements
 
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
