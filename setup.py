@@ -10,7 +10,8 @@ setup(
     packages=['crystal'],
     # Needed for dependencies
     # install_requires=['numpy'],
-    install_reqs = parse_requirements('requirements.txt', session='hack') #https://stackoverflow.com/questions/14399534/reference-requirements-txt-for-the-install-requires-kwarg-in-setuptools-setup-py
+    #https://stackoverflow.com/questions/14399534/reference-requirements-txt-for-the-install-requires-kwarg-in-setuptools-setup-py
+    install_reqs = parse_requirements('requirements.txt', session='hack'),
     # *strongly* suggested for sharing
     version='1.0',
     # The license can be anything you like
