@@ -4,6 +4,10 @@ try: # for pip >= 10
 except ImportError: # for pip <= 9.0.3
     from pip.req import parse_requirements
 
+#testing
+parseTest = parse_requirements('requirements.txt', session='hack')
+print(parseTest)
+
 setup(
     # Needed to silence warnings (and to be a worthwhile package)
     name='Crystal',
