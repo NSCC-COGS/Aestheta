@@ -1,8 +1,10 @@
 from setuptools import setup
+'''
 try: # for pip >= 10
     from pip._internal.req import parse_requirements
 except ImportError: # for pip <= 9.0.3
     from pip.req import parse_requirements
+    '''
 
 # #testing
 # parseTest = parse_requirements('requirements.txt', session='hack')
@@ -21,7 +23,7 @@ with pathlib.Path('requirements.txt').open() as requirements_txt:
     ]
 
 
-# print(install_requires)
+print(install_requires)
 # input('ok?')
 
 setup(
@@ -35,8 +37,8 @@ setup(
     # Needed for dependencies
     # install_requires=['numpy'],
     #https://stackoverflow.com/questions/14399534/reference-requirements-txt-for-the-install-requires-kwarg-in-setuptools-setup-py
-    # install_reqs = parse_requirements('requirements.txt', session='hack'),
-    install_reqs = install_requires,
+    # install_requires = parse_requirements('requirements.txt', session='hack'),
+    install_requires = install_requires,
     # *strongly* suggested for sharing
     version='1.0',
     # The license can be anything you like
