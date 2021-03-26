@@ -116,8 +116,20 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
         ).fit(arr_RGB_subsample, arr_classes_subsample)
 
     return classModel, classes
+
+def getDir(dirName = 'Models'):
+
+    # this looks locally to this file and finds the dir based on the same
+    model_dir = os.path.dirname(__file__)
+    model_dir = os.path.join(model_dir,dirName)
+
+    return model_dir
     
-def saveModel(classModel, classes, sillyName = None):
+def saveModel(classModel, classes, sillyName = None, model_dir = None):
+
+    if model_dir == None:
+        model_dir = getDir('Models')
+
     #puts the classificaion model and the classes into a list 
     model = [classModel, classes]
 
@@ -132,12 +144,18 @@ def saveModel(classModel, classes, sillyName = None):
         uniqueString += '_'+sillyName
 
     #saves out the model list with a name from the current time
-    filename = f'Models/simpleClassifier_{uniqueString}.aist'
+    current_model = f'simpleClassifier_{uniqueString}.aist'
+    filename = os.path.join(model_dir,current_model)
+
     print('saving model to',filename)
     pickle.dump(model, open(filename, 'wb'))
     print('complete..')
 
-def loadModel(name = None, model_dir = 'Models/'):
+def loadModel(name = None, model_dir = None):
+
+    if model_dir == None:
+        model_dir = getDir('Models')
+
     model_list = os.listdir(model_dir)
     print(model_list)
 
@@ -163,7 +181,7 @@ def loadModel(name = None, model_dir = 'Models/'):
             # print(a)
 
     try:        
-        filename = model_dir+newest_model
+        filename = os.path.join(model_dir,newest_model)
         print(filename)
     except:
         print(f'No Model found for {python_bits_user} bit pythion')
@@ -324,7 +342,7 @@ def image_convolution_RGB(img_RGB):
 
 if __name__ == '__main__':
     #for now we can put tests here!
-    if 1: #test load the wms tile
+    if 0: #test load the wms tile
         testTile = getTile()
         plt.imshow(testTile)
         plt.show()
@@ -414,6 +432,7 @@ if __name__ == '__main__':
         print('Model saved')
 
     if 1: #test load model
+        img_RGB = getTile(source = 'google_sat')
         print('Loaded model by name')
         classModel, classes = loadModel()
         print('Loaded model omitting name')
@@ -422,7 +441,7 @@ if __name__ == '__main__':
         plt.imshow(img_class)
         plt.show()
 
-    if 1: #test load model, multiple
+    if 0: #test load model, multiple
         ''' this is unreasonably slow!''' 
         classModel, classes = loadModel()
         img_RGB_1 = getTile(source = 'google_sat')
