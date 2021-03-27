@@ -27,23 +27,23 @@ from sklearn.ensemble import GradientBoostingClassifier
 # We can bring it back in once we've finished converting this to a Python
 # package.
 #
-# def shpreader(fname, show = False):
-#     shp = shapefile.Reader(fname) # note this currently wont work!
-#     
-#     # show if show is passed as true
-#     if show:
-#         plt.figure()
-#         
-#         for shape in shp.shapeRecords():
-#             x = [i[0] for i in shape.shape.points[:]]
-#             y = [i[1] for i in shape.shape.points[:]]
-#             plt.plot(x,y)
-#         
-#         plt.show()
-#         
-#     # close the reader object and return it
-#     shp.close()
-#     return shp
+def shpreader(fname, show = False):
+    shp = shapefile.Reader(fname) # note this currently wont work!
+    
+    # show if show is passed as true
+    if show:
+        plt.figure()
+        
+        for shape in shp.shapeRecords():
+            x = [i[0] for i in shape.shape.points[:]]
+            y = [i[1] for i in shape.shape.points[:]]
+            plt.plot(x,y)
+        
+        plt.show()
+        
+    # close the reader object and return it
+    shp.close()
+    return shp
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
 def tile_from_coords(lon, lat, zoom):
