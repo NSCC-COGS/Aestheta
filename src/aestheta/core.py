@@ -12,7 +12,7 @@ from datetime import datetime
 import imageio
 import numpy as np
 import requests
-# import shapefile # temporarily removed so our code works in colab!
+import shapefile # temporarily removed so our code works in colab!
 
 from matplotlib import pyplot as plt
 from scipy import ndimage
