@@ -46,7 +46,7 @@ def shpreader(fname, show = False):
     return shp
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
-def tile_from_coords(lon, lat, zoom):
+def tile_from_coords(lat, lon, zoom):
     lat_rad = math.radians(lat)
     n = 2.0 ** zoom
     tile_x = int((lon + 180.0) / 360.0 * n)
@@ -59,7 +59,7 @@ def coords_from_tile(tile_x, tile_y, zoom):
     lon_deg = tile_x / n * 360.0 - 180.0
     lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * tile_y / n)))
     lat_deg = math.degrees(lat_rad)
-    return [lon_deg, lat_deg, zoom]
+    return [lat_deg, lon_deg, zoom]
 
 def getTile(xyz=[0,0,0], source='google_map', show=False):
     '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
@@ -372,10 +372,10 @@ if __name__ == '__main__':
         ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
         plt.show()
     
-    if 0: #test image normalising difference
+    if 1: #test image normalising difference
         
-        img_RGB = getTile([-63.5752,44.6488,2],source='google_sat')
-        ND = norm_diff(img_RGB,  B1=1, B2=2)
+        img_RGB = getTile([44.6488,-63.5752,2],source='google_sat') #swapped lat/lon
+        ND = norm_diff(img_RGB,  B1=1, B2=2, show=True)
         
 
         
