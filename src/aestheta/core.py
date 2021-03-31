@@ -12,7 +12,7 @@ from datetime import datetime
 import imageio
 import numpy as np
 import requests
-# import shapefile # temporarily removed so our code works in colab!
+import shapefile # temporarily removed so our code works in colab!
 
 from matplotlib import pyplot as plt
 from scipy import ndimage
@@ -27,26 +27,26 @@ from sklearn.ensemble import GradientBoostingClassifier
 # We can bring it back in once we've finished converting this to a Python
 # package.
 #
-# def shpreader(fname, show = False):
-#     shp = shapefile.Reader(fname) # note this currently wont work!
-#     
-#     # show if show is passed as true
-#     if show:
-#         plt.figure()
-#         
-#         for shape in shp.shapeRecords():
-#             x = [i[0] for i in shape.shape.points[:]]
-#             y = [i[1] for i in shape.shape.points[:]]
-#             plt.plot(x,y)
-#         
-#         plt.show()
-#         
-#     # close the reader object and return it
-#     shp.close()
-#     return shp
+def shpreader(fname, show = False):
+    shp = shapefile.Reader(fname) # note this currently wont work!
+    
+    # show if show is passed as true
+    if show:
+        plt.figure()
+        
+        for shape in shp.shapeRecords():
+            x = [i[0] for i in shape.shape.points[:]]
+            y = [i[1] for i in shape.shape.points[:]]
+            plt.plot(x,y)
+        
+        plt.show()
+        
+    # close the reader object and return it
+    shp.close()
+    return shp
 
 # Adapted from deg2num at https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Lon..2Flat._to_tile_numbers_2
-def tile_from_coords(lon, lat, zoom):
+def tile_from_coords(lat, lon, zoom):
     lat_rad = math.radians(lat)
     n = 2.0 ** zoom
     tile_x = int((lon + 180.0) / 360.0 * n)
@@ -59,7 +59,7 @@ def coords_from_tile(tile_x, tile_y, zoom):
     lon_deg = tile_x / n * 360.0 - 180.0
     lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * tile_y / n)))
     lat_deg = math.degrees(lat_rad)
-    return [lon_deg, lat_deg, zoom]
+    return [lat_deg, lon_deg, zoom]
 
 def getTile(xyz=[0,0,0], source='google_map', show=False):
     '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
@@ -116,8 +116,20 @@ def simpleClassifier(img_RGB, img_features, subsample = 100):
         ).fit(arr_RGB_subsample, arr_classes_subsample)
 
     return classModel, classes
+
+def getDir(dirName = 'Models'):
+
+    # this looks locally to this file and finds the dir based on the same
+    model_dir = os.path.dirname(__file__)
+    model_dir = os.path.join(model_dir,dirName)
+
+    return model_dir
     
-def saveModel(classModel, classes, sillyName = None):
+def saveModel(classModel, classes, sillyName = None, model_dir = None):
+
+    if model_dir == None:
+        model_dir = getDir('Models')
+
     #puts the classificaion model and the classes into a list 
     model = [classModel, classes]
 
@@ -132,12 +144,18 @@ def saveModel(classModel, classes, sillyName = None):
         uniqueString += '_'+sillyName
 
     #saves out the model list with a name from the current time
-    filename = f'Models/simpleClassifier_{uniqueString}.aist'
+    current_model = f'simpleClassifier_{uniqueString}.aist'
+    filename = os.path.join(model_dir,current_model)
+
     print('saving model to',filename)
     pickle.dump(model, open(filename, 'wb'))
     print('complete..')
 
-def loadModel(name = None, model_dir = 'Models/'):
+def loadModel(name = None, model_dir = None):
+
+    if model_dir == None:
+        model_dir = getDir('Models')
+
     model_list = os.listdir(model_dir)
     print(model_list)
 
@@ -163,7 +181,7 @@ def loadModel(name = None, model_dir = 'Models/'):
             # print(a)
 
     try:        
-        filename = model_dir+newest_model
+        filename = os.path.join(model_dir,newest_model)
         print(filename)
     except:
         print(f'No Model found for {python_bits_user} bit pythion')
@@ -324,7 +342,7 @@ def image_convolution_RGB(img_RGB):
 
 if __name__ == '__main__':
     #for now we can put tests here!
-    if 1: #test load the wms tile
+    if 0: #test load the wms tile
         testTile = getTile()
         plt.imshow(testTile)
         plt.show()
@@ -354,10 +372,10 @@ if __name__ == '__main__':
         ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
         plt.show()
     
-    if 0: #test image normalising difference
+    if 1: #test image normalising difference
         
-        img_RGB = getTile([-63.5752,44.6488,2],source='google_sat')
-        ND = norm_diff(img_RGB,  B1=1, B2=2)
+        img_RGB = getTile([44.6488,-63.5752,2],source='google_sat') #swapped lat/lon
+        ND = norm_diff(img_RGB,  B1=1, B2=2, show=True)
         
 
         
@@ -414,6 +432,7 @@ if __name__ == '__main__':
         print('Model saved')
 
     if 1: #test load model
+        img_RGB = getTile(source = 'google_sat')
         print('Loaded model by name')
         classModel, classes = loadModel()
         print('Loaded model omitting name')
@@ -422,7 +441,7 @@ if __name__ == '__main__':
         plt.imshow(img_class)
         plt.show()
 
-    if 1: #test load model, multiple
+    if 0: #test load model, multiple
         ''' this is unreasonably slow!''' 
         classModel, classes = loadModel()
         img_RGB_1 = getTile(source = 'google_sat')
