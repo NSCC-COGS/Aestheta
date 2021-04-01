@@ -21,12 +21,23 @@ from sklearn.ensemble import GradientBoostingClassifier
 # Local
 # Nothing here yet!
 
+def features_from_image(img):
+    features = img.reshape(-1, img.shape[2])
+    return features
+
+def image_from_features(features, width):
+    length,depth = features.shape
+    height = int(length/width)
+    img = features.reshape(width,height,depth)
+    return img
+
 ## function to read/load shapefiles based on file name
 #
 # This won't work without the shapefile dependency, so I've commented it out.
 # We can bring it back in once we've finished converting this to a Python
 # package.
 #
+
 def shpreader(fname, show = False):
     shp = shapefile.Reader(fname) # note this currently wont work!
     

@@ -1,6 +1,16 @@
 if __name__ == '__main__':
     from core import *
 
+    if 1: #test image to features and back
+        testTile = getTile()
+        testFeatures = features_from_image(testTile)
+        print(testFeatures)
+
+        testTile_2 = image_from_features(testFeatures, testTile.shape[0])
+        plt.imshow(testTile_2)
+        plt.show()
+
+
     if 0: #test load the wms tile
         testTile = getTile()
         plt.imshow(testTile)
@@ -31,7 +41,7 @@ if __name__ == '__main__':
         ax3.imshow(img_class);ax3.axis('off');ax3.set_title('Classification')
         plt.show()
     
-    if 1: #test image normalising difference
+    if 0: #test image normalising difference
         
         img_RGB = getTile([44.6488,-63.5752,2],source='google_sat') #swapped lat/lon
         ND = norm_diff(img_RGB,  B1=1, B2=2, show=True)
@@ -82,7 +92,7 @@ if __name__ == '__main__':
         plt.imshow(img_c, cmap='gray')
         plt.show()
 
-    if 1: #test model save
+    if 0: #test model save
         img_RGB = getTile(source = 'google_sat')
         img_features = getTile(source = 'google_map')
         classModel,classes = simpleClassifier(img_RGB, img_features)
@@ -90,7 +100,7 @@ if __name__ == '__main__':
         saveModel(classModel, classes, sillyName = 'HelloEarth100')
         print('Model saved')
 
-    if 1: #test load model
+    if 0: #test load model
         img_RGB = getTile(source = 'google_sat')
         print('Loaded model by name')
         classModel, classes = loadModel()
