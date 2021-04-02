@@ -13,6 +13,7 @@ import imageio
 import numpy as np
 import requests
 import shapefile # temporarily removed so our code works in colab!
+import cv2
 
 from matplotlib import pyplot as plt
 from scipy import ndimage
@@ -30,6 +31,66 @@ def image_from_features(features, width):
     height = int(length/width)
     img = features.reshape(width,height,depth)
     return img
+
+def unique_classes_from_image(img):
+    features = features_from_image(img)
+    classes,arr_classes,counts =  np.unique(features, axis=0, return_inverse=True, return_counts=True)
+    return classes, arr_classes, counts
+
+def histogram_from_image(img):
+    classes, arr_classes, counts = unique_classes_from_image(img)
+    bar_arr_dim = arr_classes.max()
+    bar_arr = np.zeros((bar_arr_dim,bar_arr_dim,4)).astype(int)
+    counts = np.log(counts)
+    bar_heights = (counts/counts.max()*bar_arr_dim).astype(int)
+    for i in range(bar_arr_dim):
+        bar_arr[i,0:bar_heights[i],0:img.shape[2]]=classes[i]
+        bar_arr[i,0:bar_heights[i],3]=255 #not that elegant, sets transparency 
+    return bar_arr
+
+def kmeans(img, k=3, show = True, iterations = 100):
+    features = features_from_image(img)
+    features = np.float32(features)
+
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, iterations, 0.2)
+    _, labels, (centers) = cv2.kmeans(features, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+    centers = np.uint8(centers)
+    labels = labels.flatten()
+    segmented_image = centers[labels.flatten()]
+    segmented_image = segmented_image.reshape(img.shape)
+
+    if show:
+        plt.imshow(segmented_image)
+        plt.show()
+        return segmented_image
+    else:
+        return segmented_image
+
+def ourPlot(a, interpolation = 'bilinear', histogram=True):
+    stats = {
+        'max' : np.nanmax(a),
+        'min' : np.nanmin(a),
+        'mean' : np.nanmean(a),
+        'std' : np.nanstd(a),
+        'bitDepth' : a.dtype,
+        'dimensions' : a.shape,
+        'top_left_value' : a[0,0]
+    }
+
+    for item in stats:
+        print('%s: %s'%(item, stats[item]))
+
+    plt.cla()
+    plt.subplot(121)
+    plt.imshow(a ,interpolation = interpolation)
+    if histogram:
+        plt.subplot(122)
+        plt.hist(a.flatten(),bins=100)
+        s0 = stats['mean'] - stats['std']
+        s1 = stats['mean'] + stats['std']
+        plt.axvline(s0,c='red')
+        plt.axvline(s1,c='red')
 
 ## function to read/load shapefiles based on file name
 #

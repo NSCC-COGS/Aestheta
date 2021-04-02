@@ -1,7 +1,7 @@
 if __name__ == '__main__':
     from core import *
 
-    if 1: #test image to features and back
+    if 0: #test image to features and back
         testTile = getTile()
         testFeatures = features_from_image(testTile)
         print(testFeatures)
@@ -10,6 +10,35 @@ if __name__ == '__main__':
         plt.imshow(testTile_2)
         plt.show()
 
+    if 0: #test finding unique values in an image
+        testTile = getTile()
+        classes,arr_classes,counts = unique_classes_from_image(testTile)
+        print(classes.shape)
+        print(arr_classes.shape)
+        print(counts.shape)
+
+    if 0: #test our histogram
+        testTile = getTile([0,0,0])
+        # testTile = getTile([0,0,0],'google_sat') # will break function, too many classes
+        testHisto = histogram_from_image(testTile)
+        plt.imshow(testHisto)
+        plt.show()
+
+    if 0: #test kmeans function
+        testTile = getTile([0,0,0],'google_sat')
+        testKmean = kmeans(testTile, k=3, show = True)
+
+    if 0: #test kmeans + histogram
+        testTile = getTile([0,0,0],'google_sat')
+        testKmean = kmeans(testTile, k=7,show=False)
+        testHisto = histogram_from_image(testKmean)
+        plt.imshow(testHisto)
+        plt.show()
+
+    if 1: #test plot
+        testTile = getTile([0,0,0],'google_sat')
+        ourPlot(testTile)
+        plt.show()
 
     if 0: #test load the wms tile
         testTile = getTile()
