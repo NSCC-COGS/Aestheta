@@ -35,10 +35,14 @@ if __name__ == '__main__':
         plt.imshow(testHisto)
         plt.show()
 
-    if 1: #test plot
+    if 0: #test plot
         testTile = getTile([0,0,0],'google_sat')
         ourPlot(testTile)
-        plt.show()
+        plt.show    
+        
+    if 1: #test wmf data source
+        # testTile = getTile([0,0,0],'wmf', show=True)
+        testTile = getTile([44.6488,-63.5752,15],'wmf', show=True)
 
     if 0: #test load the wms tile
         testTile = getTile()

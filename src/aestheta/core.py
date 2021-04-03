@@ -157,6 +157,9 @@ def getTile(xyz=[0,0,0], source='google_map', show=False):
     elif source == 'esri':
         # otiles was down so replaced with esri - a nice source
         url = f'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}'
+    elif source == 'wmf':
+        # otiles was down so replaced with esri - a nice source
+        url = f'http://c.tiles.wmflabs.org/osm-no-labels/{z}/{x}/{y}.png'
 
     #creates a header indicating a user browser to bypass blocking, note this is not meant for exhaustive usage
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
