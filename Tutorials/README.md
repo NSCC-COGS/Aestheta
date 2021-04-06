@@ -12,4 +12,4 @@ Here are some more step by step guide for some of the procedures and tools used 
 
 ## New updates Include:
 
-[numpy_tutorial.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Tutorials/numpy_tutorial.ipynb) a fairlt exaustive _but still a work in progress _tutorial for using numpy arrays - a corestone of image analytics in python
+[numpy_tutorial.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Tutorials/numpy_tutorial.ipynb) a fairly exhaustive *(but still a work in progress!)* tutorial for using numpy arrays - a corestone of image analytics in python
