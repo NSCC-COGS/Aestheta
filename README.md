@@ -37,7 +37,7 @@ We reccomend 64-bit python version 3.7.10 and higher. We use scikit-learn which 
 
 ## Note for windows users! 
 
-To get access the magical GIS tools in **GDAL**, **rasterio**, and **fiona** on _windows_ - we recommend you donwload the appropriate wheel files for your vesrion on python from the glorious [website]((https://www.lfd.uci.edu/~gohlke/pythonlibs/)) of Christoph Gohlke.
+To get access the magical GIS tools in **GDAL**, **rasterio**, and **fiona** on _windows_ - we recommend you donwload the appropriate wheel files for your vesrion on python from the glorious [website](https://www.lfd.uci.edu/~gohlke/pythonlibs/) of Christoph Gohlke.
 
 Once you have these wheel files, you can run the following commands in command line ... 
 
