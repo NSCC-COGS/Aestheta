@@ -35,6 +35,24 @@ Stay tuned for more simple examples of what were doing with this data.
 
 We reccomend 64-bit python version 3.7.10 and higher. We use scikit-learn which includes numpy, imageIO. 
 
+## Note for windows users! 
+
+To get access the magical GIS tools in **GDAL**, **rasterio**, and **fiona** on _windows_ - we recommend you donwload the appropriate wheel files for your vesrion on python from the glorious [website]((https://www.lfd.uci.edu/~gohlke/pythonlibs/)) of Christoph Gohlke.
+
+Once you have these wheel files, you can run the following commands in command line ... 
+
+```cd c:\downloads```
+
+```py -3.9 -m pip install GDAL-3.2.2-cp39-cp39-win_amd64.whl```
+
+```py -3.9 -m pip install rasterio-1.2.1-cp39-cp39-win_amd64.whl```
+
+```py -3.9 -m pip install Fiona-1.8.18-cp39-cp39-win_amd64.whl```
+
+
+
+*these are for example having downloaded the wheel files to c:\downloads and for 64bit python version 3.9*
+
 # Earth is Special
 We're teaching an AI to understand what it means to be looking at our lovely planet. 
 
