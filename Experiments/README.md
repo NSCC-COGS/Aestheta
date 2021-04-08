@@ -22,3 +22,5 @@ Here are some key experiments we've been working on. Check them out live through
 [VGG_features.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/wild/VGG_features.ipynb) where we can see VGG being used as an mage feature extractor 
 
 [visualize_GOES16_from_AWS.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/goes/visualize_GOES16_from_AWS.ipynb) an example of a library which can provide access to GOES images from AWS
+
+[landsat_rasterio.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/wild/landsat_rasterio.ipynb) Demonstrates how a given landsat image url can be used to generate a 256X256 slippy tile in web mercator projection.
