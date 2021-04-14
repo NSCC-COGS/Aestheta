@@ -133,7 +133,7 @@ def coords_from_tile(tile_x, tile_y, zoom):
     lat_deg = math.degrees(lat_rad)
     return [lat_deg, lon_deg, zoom]
 
-def getTile(xyz=[0,0,0], source='google_map', show=False):
+def getTile(xyz=[0,0,0], source='google_map', show=False, verbose=False):
     '''grabs a tile of a given xyz (or lon, lat, z) from various open WMS services
     note: these services are not meant to be web scraped and should not be accessed excessively'''
 
@@ -143,7 +143,8 @@ def getTile(xyz=[0,0,0], source='google_map', show=False):
     if isinstance(x, float) and isinstance(y, float):
         x, y, z = tile_from_coords(x, y, z)
 
-    print(x, y, z)
+    if verbose:
+        print(x, y, z)
 
     if source == 'google_map':
         url = f'http://mt.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
