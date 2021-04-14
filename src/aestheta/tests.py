@@ -28,12 +28,13 @@ if __name__ == '__main__':
         testTile = getTile([0,0,0],'google_sat')
         testKmean = kmeans(testTile, k=3, show = True)
 
-    if 0: #test kmeans + histogram
+    if 1: #test kmeans + histogram
         testTile = getTile([0,0,0],'google_sat')
         testKmean = kmeans(testTile, k=7,show=False)
         testHisto = histogram_from_image(testKmean)
         plt.imshow(testHisto)
         plt.show()
+        input('did it work?')
 
     if 0: #test plot
         testTile = getTile([0,0,0],'google_sat')

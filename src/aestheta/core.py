@@ -39,7 +39,7 @@ def unique_classes_from_image(img):
 
 def histogram_from_image(img):
     classes, arr_classes, counts = unique_classes_from_image(img)
-    bar_arr_dim = arr_classes.max()
+    bar_arr_dim = arr_classes.max()+1
     bar_arr = np.zeros((bar_arr_dim,bar_arr_dim,4)).astype(int)
     counts = np.log(counts)
     bar_heights = (counts/counts.max()*bar_arr_dim).astype(int)
