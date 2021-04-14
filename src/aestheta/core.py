@@ -48,7 +48,7 @@ def histogram_from_image(img):
         bar_arr[i,0:bar_heights[i],3]=255 #not that elegant, sets transparency 
     return bar_arr
 
-def kmeans(img, k=3, show = True, iterations = 100):
+def kmeans(img, k=3, show = False, iterations = 100, return_lut = False):
     features = features_from_image(img)
     features = np.float32(features)
 
@@ -63,7 +63,9 @@ def kmeans(img, k=3, show = True, iterations = 100):
     if show:
         plt.imshow(segmented_image)
         plt.show()
-        return segmented_image
+
+    if return_lut:
+        return segmented_image,centers
     else:
         return segmented_image
 
