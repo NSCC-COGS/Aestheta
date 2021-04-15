@@ -15,7 +15,7 @@ Here are some key experiments we've been working on. Check them out live through
 [NDPI_segmentation_landsat_tests.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/NDPI_segmentation_landsat_tests.ipynb)
 
 
-## New updates include
+## Recent updates include
 
 [project_zostera.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/zostera/project_zostera.ipynb) which shows how rasterio can be used to snap-align raster and vector data
 
@@ -24,3 +24,7 @@ Here are some key experiments we've been working on. Check them out live through
 [visualize_GOES16_from_AWS.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/goes/visualize_GOES16_from_AWS.ipynb) an example of a library which can provide access to GOES images from AWS
 
 [landsat_rasterio.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/wild/landsat_rasterio.ipynb) Demonstrates how a given landsat image url can be used to generate a 256X256 slippy tile in web mercator projection.
+
+## New updates include
+
+[Aestheta_linknet_segmentation.ipynb](https://colab.research.google.com/github/NSCC-COGS/Aestheta/blob/main/Experiments/Aestheta_linknet_segmentation.ipynb) using a pre-trained linknet convolutional neural networtk to segment google map tiles!
